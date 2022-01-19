@@ -86,7 +86,7 @@ class PostListItem extends StatelessWidget {
                       ),
                       Text(
                         post.post.content,
-                        maxLines: 3,
+                        maxLines: 4,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           color: Colors.black,
@@ -94,14 +94,44 @@ class PostListItem extends StatelessWidget {
                           fontSize: 13,
                         ),
                       ),
+                      const Divider(
+                        color: Colors.grey,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          rowPostMoreInfo(Icons.remove_red_eye, post.post.view),
+                          rowPostMoreInfo(
+                              Icons.comment, post.post.totalComment),
+                          rowPostMoreInfo(
+                              Icons.bookmark, post.post.totalBookmark),
+                        ],
+                      )
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget rowPostMoreInfo(IconData icon, dynamic text) {
+    return Wrap(
+      children: [
+        Icon(
+          icon,
+          size: 15,
+          color: Colors.cyan,
+        ),
+        const SizedBox(width: 3),
+        Text(
+          "$text",
+          style: const TextStyle(fontSize: 12),
+        ),
+      ],
     );
   }
 }

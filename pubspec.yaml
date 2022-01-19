@@ -24,10 +24,13 @@ dependencies:
   http: ^0.13.4
   hydrated_bloc: ^8.0.0
   intl: ^0.17.0
+  loading_animation_widget: ^1.0.0+1
+  loading_indicator: ^3.0.2
   markdown_widget: ^1.2.7
   path_provider: ^2.0.8
   scroll_navigation: ^1.3.2
   shared_preferences: ^2.0.11
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_lints: ^1.0.0

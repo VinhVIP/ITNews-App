@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class Post extends Equatable {
+  static const Post empty = Post();
+
   final int idPost;
   final int idAccount;
   final String title;
@@ -29,10 +31,10 @@ class Post extends Equatable {
     this.access = -1,
     this.bookmarkStatus = false,
     this.view = 0,
-    this.totalComment = -1,
-    this.totalBookmark = -1,
-    this.totalVoteUp = -1,
-    this.totalVoteDown = -1,
+    this.totalComment = 0,
+    this.totalBookmark = 0,
+    this.totalVoteUp = 0,
+    this.totalVoteDown = 0,
   });
 
   @override

@@ -51,6 +51,40 @@ class PostRepository {
     }
   }
 
+  Future<PostFull?> getPost(int idPost) async {
+    final url = Uri.parse(Strings.baseURL + "post/$idPost");
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      final PostFull post = PostFull(
+        post: Post.fromMap(body['data']['post']),
+        author: User.fromMap(body['data']['author']),
+        tags: (body['data']['tags'] as List)
+            .map((tag) => Tag.fromMap(tag))
+            .toList(),
+      );
+      return post;
+    }
+  }
+
+  Future<http.Response> addBookmark(int idPost) async {
+    final url = Uri.parse(Strings.baseURL + "bookmark/$idPost");
+    var response = await http.post(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+    return response;
+  }
+
+  Future<http.Response> deleteBookmark(int idPost) async {
+    final url = Uri.parse(Strings.baseURL + "bookmark/$idPost");
+    var response = await http.delete(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+    return response;
+  }
+
   Future<List<Comment>?> getCommentsOfPost(int idPost) async {
     final url = Uri.parse(Strings.baseURL + "post/$idPost/comment");
     var response = await http.get(url);
