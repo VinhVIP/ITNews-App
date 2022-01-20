@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class Comment extends Equatable {
+  static const int SHOW = 0;
+  static const int HIDE = 1;
+
   final int idComment;
   final String content;
   final int idCommentParent;
@@ -15,6 +18,10 @@ class Comment extends Equatable {
   final String day;
   final String time;
   List<Comment> replies = [];
+
+  bool isShow() {
+    return status == SHOW;
+  }
 
   Comment({
     this.idComment = 0,

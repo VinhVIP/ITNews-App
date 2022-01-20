@@ -23,10 +23,10 @@ class CommentsPage extends StatelessWidget {
       child: FractionallySizedBox(
         heightFactor: 0.89,
         child: Column(
-          children: const [
-            ModalCommentsHeader(),
-            ModalComments(),
-            CommentInput(),
+          children: [
+            const ModalCommentsHeader(),
+            ModalComments(idPost: post.post.idPost),
+            const CommentInput(),
           ],
         ),
       ),

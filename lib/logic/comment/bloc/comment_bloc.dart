@@ -18,6 +18,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
     on<CommentFetched>(_onCommentFetched);
     on<CommentInserted>(_onCommentInserted);
     on<CommentReplied>(_onUiReplied);
+    on<CommentStatusChanged>(_onCommentStatusChanged);
   }
 
   void _onUiReplied(CommentReplied event, Emitter<CommentState> emit) {
@@ -72,6 +73,51 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> _onCommentStatusChanged(
+      CommentStatusChanged event, Emitter<CommentState> emit) async {
+    final response = await postRepository.changeCommentStatus(
+        event.idPost, event.idComment, event.commentStatus);
+
+    if (response.statusCode == 200) {
+      final List<Comment> comments = List.from(state.comments);
+      for (int i = 0; i < comments.length; i++) {
+        Comment cmt = comments[i];
+        if (cmt.idComment == event.idComment) {
+          Comment commentChange = cmt.copyWith(status: event.commentStatus);
+          commentChange.replies = List.from(cmt.replies);
+          comments.removeAt(i);
+          comments.insert(i, commentChange);
+          break;
+        } else {
+          // tìm kiếm các bình luận con
+          bool found = false;
+          for (int j = 0; j < cmt.replies.length; j++) {
+            if (cmt.replies[j].idComment == event.idComment) {
+              Comment commentChange =
+                  cmt.replies[j].copyWith(status: event.commentStatus);
+              final List<Comment> children = List.from(cmt.replies);
+              children.removeAt(j);
+              children.insert(j, commentChange);
+
+              Comment parentChange = cmt.copyWith();
+              parentChange.replies = List.from(children);
+              comments.removeAt(i);
+              comments.insert(i, parentChange);
+
+              found = true;
+              break;
+            }
+          }
+          if (found) break;
+        }
+      }
+
+      emit(state.copyWith(comments: comments));
+    } else {
+      print("loi");
     }
   }
 }

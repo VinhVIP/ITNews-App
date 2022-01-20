@@ -4,6 +4,11 @@ import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
   static const empty = User();
+
+  static const int ROLE_ADMIN = 1;
+  static const int ROLE_MODERATOR = 2;
+  static const int ROLE_USER = 3;
+
   final int idAccount;
   final int idRole;
   final String role;

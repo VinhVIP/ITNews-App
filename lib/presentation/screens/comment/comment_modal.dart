@@ -5,7 +5,8 @@ import 'package:it_news/logic/comment/bloc/comment_bloc.dart';
 import 'comment_item.dart';
 
 class ModalComments extends StatefulWidget {
-  const ModalComments({Key? key}) : super(key: key);
+  final int idPost;
+  const ModalComments({Key? key, required this.idPost}) : super(key: key);
 
   @override
   State<ModalComments> createState() => _ModalCommentsState();
@@ -29,7 +30,10 @@ class _ModalCommentsState extends State<ModalComments> {
             case CommentFetchStatus.success:
               return ListView.builder(
                 itemBuilder: (context, index) {
-                  return CommentItem(comment: state.comments[index]);
+                  return CommentItem(
+                    comment: state.comments[index],
+                    idPost: widget.idPost,
+                  );
                 },
                 itemCount: state.comments.length,
               );

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:it_news/core/constants/strings.dart';
+import 'package:it_news/core/utils/utils.dart';
 import 'package:it_news/data/models/user.dart';
 import 'package:it_news/data/store/shared_preferences.dart';
 
@@ -90,6 +91,7 @@ class AccountRepository {
       final body = json.decode(response.body);
       User user = User.fromMap(body['data']);
       print(user);
+      Utils.user = user;
       return user;
     }
   }

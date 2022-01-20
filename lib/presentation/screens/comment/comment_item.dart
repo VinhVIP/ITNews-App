@@ -2,12 +2,16 @@ import 'package:avatar_view/avatar_view.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:it_news/core/utils/utils.dart';
 import 'package:it_news/data/models/comment.dart';
+import 'package:it_news/data/models/user.dart';
 import 'package:it_news/logic/comment/bloc/comment_bloc.dart';
 
 class CommentItem extends StatelessWidget {
-  const CommentItem({Key? key, required this.comment}) : super(key: key);
+  const CommentItem({Key? key, required this.comment, required this.idPost})
+      : super(key: key);
   final Comment comment;
+  final int idPost;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,10 @@ class CommentItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Comment cha
-          CommentListItem(comment: comment),
+          CommentListItem(
+            comment: comment,
+            idPost: idPost,
+          ),
           // Danh sách các phản hồi của bình luận cha
           comment.replies.isNotEmpty
               ? ScrollOnExpand(
@@ -61,7 +68,10 @@ class CommentItem extends StatelessWidget {
       list.add(
         Container(
           padding: const EdgeInsets.only(left: 40),
-          child: CommentListItem(comment: cmt),
+          child: CommentListItem(
+            comment: cmt,
+            idPost: idPost,
+          ),
         ),
       );
     }
@@ -70,8 +80,10 @@ class CommentItem extends StatelessWidget {
 }
 
 class CommentListItem extends StatelessWidget {
-  const CommentListItem({Key? key, required this.comment}) : super(key: key);
+  const CommentListItem({Key? key, required this.comment, required this.idPost})
+      : super(key: key);
   final Comment comment;
+  final int idPost;
 
   // Kiểm tra `comment` có phải là comment cha hay không?
   bool isParent() {
@@ -94,7 +106,7 @@ class CommentListItem extends StatelessWidget {
               children: [
                 author(),
                 const SizedBox(height: 3),
-                Text(comment.content.trim()),
+                commentContent(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -109,6 +121,34 @@ class CommentListItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget commentContent() {
+    if (comment.isShow()) {
+      return Text(
+        comment.content.trim(),
+        style: const TextStyle(
+          color: Colors.black,
+        ),
+      );
+    } else {
+      if (Utils.user.idRole == User.ROLE_USER) {
+        return Text(
+          "Nội dung bình luận đã bị ẩn!",
+          style: TextStyle(
+            color: Colors.grey.shade400,
+            fontStyle: FontStyle.italic,
+          ),
+        );
+      } else {
+        return Text(
+          comment.content.trim(),
+          style: TextStyle(
+            color: Colors.grey.shade200,
+          ),
+        );
+      }
+    }
   }
 
   Widget avatar() {
@@ -137,13 +177,18 @@ class CommentListItem extends StatelessWidget {
       children: [
         Text(
           comment.realName,
-          style:
-              const TextStyle(color: Colors.green, fontWeight: FontWeight.w500),
+          style: const TextStyle(
+            color: Colors.green,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         const Text(" • "),
         Text(
           "@${comment.accountName}",
-          style: const TextStyle(fontStyle: FontStyle.italic),
+          style: const TextStyle(
+            color: Colors.black,
+            fontStyle: FontStyle.italic,
+          ),
         ),
       ],
     );
@@ -162,7 +207,7 @@ class CommentListItem extends StatelessWidget {
   List<Widget> actions(context) {
     List<Widget> widgets = [];
 
-    if (isParent()) {
+    if (isParent() && comment.isShow()) {
       widgets.add(
         _CommentsActionButton(
           child: const Text('Trả lời'),
@@ -178,24 +223,100 @@ class CommentListItem extends StatelessWidget {
       );
     }
 
-    widgets.add(
-      _CommentsActionButton(
-        child: const Text('Ẩn'),
-        onPressed: () {},
-      ),
-    );
-
-    widgets.add(
-      _CommentsActionButton(
-        child: const Text(
-          "Xóa",
-          style: TextStyle(color: Colors.red),
+    if (Utils.user.idAccount == comment.idAccount && comment.isShow()) {
+      widgets.add(
+        _CommentsActionButton(
+          child: const Text('Sửa'),
+          onPressed: () {},
         ),
-        onPressed: () {},
-      ),
-    );
+      );
+    }
+
+    if (Utils.user.idRole == User.ROLE_ADMIN ||
+        Utils.user.idRole == User.ROLE_MODERATOR) {
+      if (comment.isShow()) {
+        widgets.add(
+          _CommentsActionButton(
+            child: const Text('Ẩn'),
+            onPressed: () => showDialogHideComment(context),
+          ),
+        );
+      } else {
+        widgets.add(
+          _CommentsActionButton(
+            child: const Text('Hiện'),
+            onPressed: () => showDialogShowComment(context),
+          ),
+        );
+      }
+    }
+
+    if (Utils.user.idRole == User.ROLE_ADMIN ||
+        Utils.user.idAccount == comment.idAccount) {
+      widgets.add(
+        _CommentsActionButton(
+          child: const Text(
+            "Xóa",
+            style: TextStyle(color: Colors.red),
+          ),
+          onPressed: () {},
+        ),
+      );
+    }
 
     return widgets;
+  }
+
+  void showDialogHideComment(ctx) {
+    showDialog<String>(
+      context: ctx,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Xác nhận'),
+        content: Text('Bạn muốn ẩn bình luận của ${comment.realName}?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Hủy'),
+          ),
+          TextButton(
+            onPressed: () {
+              BlocProvider.of<CommentBloc>(ctx).add(CommentStatusChanged(
+                  idComment: comment.idComment,
+                  idPost: idPost,
+                  commentStatus: Comment.HIDE));
+              Navigator.pop(context);
+            },
+            child: const Text('Đồng ý'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showDialogShowComment(ctx) {
+    showDialog<String>(
+      context: ctx,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Xác nhận'),
+        content: Text('Bạn muốn hiển thị bình luận của ${comment.realName}?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Hủy'),
+          ),
+          TextButton(
+            onPressed: () {
+              BlocProvider.of<CommentBloc>(ctx).add(CommentStatusChanged(
+                  idComment: comment.idComment,
+                  idPost: idPost,
+                  commentStatus: Comment.SHOW));
+              Navigator.pop(context);
+            },
+            child: const Text('Đồng ý'),
+          ),
+        ],
+      ),
+    );
   }
 }
 

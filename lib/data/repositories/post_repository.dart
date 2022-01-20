@@ -189,4 +189,14 @@ class PostRepository {
       return comment;
     }
   }
+
+  Future<http.Response> changeCommentStatus(
+      int idPost, int idComment, int commentStatus) async {
+    final url = Uri.parse(Strings.baseURL +
+        "post/$idPost/comment/$idComment/status/$commentStatus");
+    var response = await http.put(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+    return response;
+  }
 }

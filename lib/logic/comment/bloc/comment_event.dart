@@ -31,3 +31,18 @@ class CommentReplied extends CommentEvent {
   @override
   List<Object> get props => [idParentComment, realNameAccountParent];
 }
+
+class CommentStatusChanged extends CommentEvent {
+  final int idPost;
+  final int idComment;
+  final int commentStatus;
+
+  const CommentStatusChanged({
+    required this.idComment,
+    required this.idPost,
+    required this.commentStatus,
+  });
+
+  @override
+  List<Object> get props => [idComment, idPost, commentStatus];
+}

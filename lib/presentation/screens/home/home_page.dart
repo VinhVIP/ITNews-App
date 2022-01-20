@@ -1,54 +1,43 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:it_news/logic/authen/bloc/authen_bloc.dart';
+import 'package:it_news/presentation/router/app_router.dart';
+import 'package:it_news/presentation/screens/home/profile.dart';
 import 'package:it_news/presentation/screens/home/tab_posts.dart';
 
 // class HomePage extends StatelessWidget {
 //   const HomePage({Key? key}) : super(key: key);
 
-//   Widget buildMD() => MarkdownWidget(
-//         padding: const EdgeInsets.symmetric(horizontal: 8),
-//         data: data,
-//         styleConfig: StyleConfig(
-//           // markdownTheme: MarkdownTheme.darkTheme,
-//           preConfig: PreConfig(
-//             language: 'xml',
-//             // theme: MarkdownTheme.lightTheme,
-//           ),
-//         ),
-//       );
-
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //         appBar: AppBar(title: const Text('Home')),
-//         body: Container(
-//           child: buildMD(),
-//         )
+//         body:
 
-//         // Center(
-//         //   child: Column(
-//         //     mainAxisSize: MainAxisSize.min,
-//         //     children: <Widget>[
-//         //       Builder(
-//         //         builder: (context) {
-//         //           final userId = context.select(
-//         //             (AuthenBloc bloc) => bloc.state.user.idAccount,
-//         //           );
-//         //           return Text('ID Account: $userId');
-//         //         },
-//         //       ),
-//         //       ElevatedButton(
-//         //         child: const Text('Logout'),
-//         //         onPressed: () {
-//         //           context.read<AuthenBloc>().add(AuthenLogoutRequested());
-//         //           Navigator.of(context)
-//         //               .pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
-//         //         },
-//         //       ),
-//         //     ],
-//         //   ),
-//         // ),
+// Center(
+//   child: Column(
+//     mainAxisSize: MainAxisSize.min,
+//     children: <Widget>[
+//       Builder(
+//         builder: (context) {
+//           final userId = context.select(
+//             (AuthenBloc bloc) => bloc.state.user.idAccount,
+//           );
+//           return Text('ID Account: $userId');
+//         },
+//       ),
+//       ElevatedButton(
+//         child: const Text('Logout'),
+//         onPressed: () {
+//           context.read<AuthenBloc>().add(AuthenLogoutRequested());
+//           Navigator.of(context)
+//               .pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
+//         },
+//       ),
+//     ],
+//   ),
+// ),
 //         );
 //   }
 // }
@@ -67,20 +56,17 @@ class _ExampleState extends State<HomePage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    TabPosts(),
-    Text(
+  static final List<Widget> _widgetOptions = <Widget>[
+    const TabPosts(),
+    const Text(
       'Likes',
       style: optionStyle,
     ),
-    Text(
+    const Text(
       'Search',
       style: optionStyle,
     ),
-    Text(
-      'Profile',
-      style: optionStyle,
-    ),
+    const Profile(),
   ];
 
   @override
