@@ -85,6 +85,44 @@ class PostRepository {
     return response;
   }
 
+  Future<http.Response> addVote(int idPost, int voteType) async {
+    final url = Uri.parse(Strings.baseURL + "vote/$idPost/$voteType");
+    var response = await http.post(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+    return response;
+  }
+
+  Future<http.Response> deleteVote(int idPost) async {
+    final url = Uri.parse(Strings.baseURL + "vote/$idPost");
+    var response = await http.delete(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+    return response;
+  }
+
+  Future<int> getTotalVoteUp(int idPost) async {
+    final url = Uri.parse(Strings.baseURL + "post/$idPost/voteup");
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      final int mark = body['data']['total'];
+      return mark;
+    }
+    return 0;
+  }
+
+  Future<int> getTotalVoteDown(int idPost) async {
+    final url = Uri.parse(Strings.baseURL + "post/$idPost/votedown");
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      final int mark = body['data']['total'];
+      return mark;
+    }
+    return 0;
+  }
+
   Future<List<Comment>?> getCommentsOfPost(int idPost) async {
     final url = Uri.parse(Strings.baseURL + "post/$idPost/comment");
     var response = await http.get(url);

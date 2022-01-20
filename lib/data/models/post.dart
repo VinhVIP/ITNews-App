@@ -15,6 +15,7 @@ class Post extends Equatable {
   final int access;
   final bool bookmarkStatus;
   final int view;
+  final int voteType;
   final int totalComment;
   final int totalBookmark;
   final int totalVoteUp;
@@ -31,6 +32,7 @@ class Post extends Equatable {
     this.access = -1,
     this.bookmarkStatus = false,
     this.view = 0,
+    this.voteType = -1,
     this.totalComment = 0,
     this.totalBookmark = 0,
     this.totalVoteUp = 0,
@@ -50,6 +52,7 @@ class Post extends Equatable {
       access,
       bookmarkStatus,
       view,
+      voteType,
       totalComment,
       totalBookmark,
       totalVoteUp,
@@ -68,6 +71,7 @@ class Post extends Equatable {
     int? access,
     bool? bookmarkStatus,
     int? view,
+    int? voteType,
     int? totalComment,
     int? totalBookmark,
     int? totalVoteUp,
@@ -84,6 +88,7 @@ class Post extends Equatable {
       access: access ?? this.access,
       bookmarkStatus: bookmarkStatus ?? this.bookmarkStatus,
       view: view ?? this.view,
+      voteType: voteType ?? this.voteType,
       totalComment: totalComment ?? this.totalComment,
       totalBookmark: totalBookmark ?? this.totalBookmark,
       totalVoteUp: totalVoteUp ?? this.totalVoteUp,
@@ -103,6 +108,7 @@ class Post extends Equatable {
       'access': access,
       'bookmark_status': bookmarkStatus,
       'view': view,
+      'vote_type': voteType,
       'total_comment': totalComment,
       'total_bookmark': totalBookmark,
       'total_vote_up': totalVoteUp,
@@ -122,6 +128,7 @@ class Post extends Equatable {
       access: map['access']?.toInt() ?? 0,
       bookmarkStatus: map['bookmark_status'] ?? false,
       view: map['view']?.toInt() ?? 0,
+      voteType: map['vote_type']?.toInt() ?? -1,
       totalComment:
           map['total_comment'] != null ? int.parse(map['total_comment']) : 0,
       totalBookmark:

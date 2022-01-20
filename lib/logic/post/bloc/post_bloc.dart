@@ -13,6 +13,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<PostFetched>(_onPostFetched);
     on<PostBookmarkAdded>(_onPostBookmarkAdded);
     on<PostBookmarkDeleted>(_onPostBookmarkDeleted);
+    on<PostVoteAdded>(_onPostVoteAdded);
+    on<PostVoteDeleted>(_onPostVoteDeleted);
   }
 
   Future<void> _onPostFetched(
@@ -68,6 +70,60 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           post: state.post.copyWith(post: post)));
     } else {
       emit(state.copyWith(bookmarkedStatus: PostBookmarkedStatus.failure));
+    }
+  }
+
+  Future<void> _onPostVoteAdded(
+      PostVoteAdded event, Emitter<PostState> emit) async {
+    if (event.voteType == PostVoteAdded.VOTEUP) {
+      emit(state.copyWith(votedStatus: PostVoteStatus.loadingUp));
+    } else {
+      emit(state.copyWith(votedStatus: PostVoteStatus.loadingDown));
+    }
+    final response = await postRepository.addVote(event.idPost, event.voteType);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final totalVoteUp = await postRepository.getTotalVoteUp(event.idPost);
+      final totalVoteDown = await postRepository.getTotalVoteDown(event.idPost);
+
+      final post = state.post.post.copyWith(
+        voteType: event.voteType,
+        totalVoteUp: totalVoteUp,
+        totalVoteDown: totalVoteDown,
+      );
+
+      emit(state.copyWith(
+        votedStatus: PostVoteStatus.voted,
+        post: state.post.copyWith(post: post),
+      ));
+    } else {
+      emit(state.copyWith(votedStatus: PostVoteStatus.failure));
+    }
+  }
+
+  Future<void> _onPostVoteDeleted(
+      PostVoteDeleted event, Emitter<PostState> emit) async {
+    if (event.previousVoteType == PostVoteAdded.VOTEUP) {
+      emit(state.copyWith(votedStatus: PostVoteStatus.loadingUp));
+    } else {
+      emit(state.copyWith(votedStatus: PostVoteStatus.loadingDown));
+    }
+    final response = await postRepository.deleteVote(event.idPost);
+    if (response.statusCode == 200) {
+      final totalVoteUp = await postRepository.getTotalVoteUp(event.idPost);
+      final totalVoteDown = await postRepository.getTotalVoteDown(event.idPost);
+
+      final post = state.post.post.copyWith(
+        voteType: -1,
+        totalVoteUp: totalVoteUp,
+        totalVoteDown: totalVoteDown,
+      );
+
+      emit(state.copyWith(
+        votedStatus: PostVoteStatus.unvoted,
+        post: state.post.copyWith(post: post),
+      ));
+    } else {
+      emit(state.copyWith(votedStatus: PostVoteStatus.failure));
     }
   }
 }
