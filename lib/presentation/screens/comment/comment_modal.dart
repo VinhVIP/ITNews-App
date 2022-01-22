@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:it_news/core/utils/utils.dart';
 import 'package:it_news/logic/comment/bloc/comment_bloc.dart';
 
 import 'comment_item.dart';
@@ -16,7 +17,17 @@ class _ModalCommentsState extends State<ModalComments> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: BlocBuilder<CommentBloc, CommentState>(
+      child: BlocConsumer<CommentBloc, CommentState>(
+        listener: (context, state) {
+          Utils.showMessageDialog(
+            context: context,
+            title: "Thông báo",
+            content: state.message,
+          );
+        },
+        listenWhen: (previous, current) {
+          return current.message.isNotEmpty;
+        },
         buildWhen: (previous, current) {
           return previous.fetchStatus != current.fetchStatus ||
               previous.comments != current.comments;
@@ -32,7 +43,6 @@ class _ModalCommentsState extends State<ModalComments> {
                 itemBuilder: (context, index) {
                   return CommentItem(
                     comment: state.comments[index],
-                    idPost: widget.idPost,
                   );
                 },
                 itemCount: state.comments.length,

@@ -32,17 +32,44 @@ class CommentReplied extends CommentEvent {
   List<Object> get props => [idParentComment, realNameAccountParent];
 }
 
+class CommentEdited extends CommentEvent {
+  final int idComment;
+  final String editContent;
+
+  const CommentEdited({this.idComment = 0, this.editContent = ""});
+
+  @override
+  List<Object> get props => [idComment];
+}
+
+class CommentUpdated extends CommentEvent {
+  final int idComment;
+  final String newContent;
+
+  const CommentUpdated({required this.idComment, required this.newContent});
+
+  @override
+  List<Object> get props => [idComment, newContent];
+}
+
 class CommentStatusChanged extends CommentEvent {
-  final int idPost;
   final int idComment;
   final int commentStatus;
 
   const CommentStatusChanged({
     required this.idComment,
-    required this.idPost,
     required this.commentStatus,
   });
 
   @override
-  List<Object> get props => [idComment, idPost, commentStatus];
+  List<Object> get props => [idComment, commentStatus];
+}
+
+class CommentDeleted extends CommentEvent {
+  final int idComment;
+
+  const CommentDeleted(this.idComment);
+
+  @override
+  List<Object> get props => [idComment];
 }

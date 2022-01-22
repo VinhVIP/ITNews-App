@@ -199,4 +199,26 @@ class PostRepository {
     });
     return response;
   }
+
+  Future<http.Response> updateComment(
+      int idPost, int idComment, String newContent) async {
+    final url =
+        Uri.parse(Strings.baseURL + "post/$idPost/comment/$idComment/update");
+    var response = await http.put(
+      url,
+      headers: {'Authorization': 'Bearer ${Strings.accessToken}'},
+      body: {'content': newContent},
+    );
+    return response;
+  }
+
+  Future<http.Response> deleteComment(int idPost, int idComment) async {
+    final url =
+        Uri.parse(Strings.baseURL + "post/$idPost/comment/$idComment/delete");
+    var response = await http.delete(
+      url,
+      headers: {'Authorization': 'Bearer ${Strings.accessToken}'},
+    );
+    return response;
+  }
 }
