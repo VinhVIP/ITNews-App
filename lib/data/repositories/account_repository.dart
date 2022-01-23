@@ -16,14 +16,19 @@ class AccountRepository {
   AccountRepository({required this.httpClient});
 
   Stream<AuthenStatus> get status async* {
-    final username = await LocalStorage.getAccountName();
-    final password = await LocalStorage.getPassword();
-
-    final response = await login(username: username, password: password);
-    if (response?.statusCode == 200) {
-      yield AuthenStatus.authenticated;
-    } else {
+    final logged = await LocalStorage.isLogged();
+    if (!logged) {
       yield AuthenStatus.unauthenticated;
+    } else {
+      final username = await LocalStorage.getAccountName();
+      final password = await LocalStorage.getPassword();
+
+      final response = await login(username: username, password: password);
+      if (response?.statusCode == 200) {
+        yield AuthenStatus.authenticated;
+      } else {
+        yield AuthenStatus.unauthenticated;
+      }
     }
 
     yield* _controllerStatus.stream;
@@ -55,6 +60,9 @@ class AccountRepository {
       LocalStorage.set(key: 'accessToken', value: body['accessToken']);
       print("token: " + body['accessToken']);
       Strings.accessToken = body['accessToken'];
+
+      // Lưu trạng thái đăng nhập
+      LocalStorage.set(key: 'logged', value: true);
 
       _controllerStatus.add(AuthenStatus.authenticated);
       return response;

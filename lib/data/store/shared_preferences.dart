@@ -26,30 +26,24 @@ class LocalStorage {
   static Future<int> getIdAccount() async {
     final prefs = await SharedPreferences.getInstance();
     int? id = prefs.getInt('id_account');
-    if (id == null) {
-      return 0;
-    } else {
-      return id;
-    }
+    return id ?? 0;
   }
 
   static Future<String> getAccountName() async {
     final prefs = await SharedPreferences.getInstance();
     String? accountName = prefs.getString('account_name');
-    if (accountName == null) {
-      return "";
-    } else {
-      return accountName;
-    }
+    return accountName ?? "";
   }
 
   static Future<String> getPassword() async {
     final prefs = await SharedPreferences.getInstance();
     String? password = prefs.getString('password');
-    if (password == null) {
-      return "";
-    } else {
-      return password;
-    }
+    return password ?? "";
+  }
+
+  static Future<bool> isLogged() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool? logged = prefs.getBool('logged');
+    return logged ?? false;
   }
 }

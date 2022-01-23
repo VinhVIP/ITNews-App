@@ -51,5 +51,6 @@ class AuthenBloc extends Bloc<AuthenEvent, AuthenState> {
   void _onAuthenLogoutRequest(
       AuthenLogoutRequested event, Emitter<AuthenState> emit) {
     _authenRepository.logout();
+    LocalStorage.set(key: 'logged', value: false);
   }
 }
