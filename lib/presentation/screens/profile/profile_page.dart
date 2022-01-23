@@ -107,7 +107,9 @@ class ProfilePage extends StatelessWidget {
         MenuItem(
           icon: Icons.password,
           title: "Đổi mật khẩu",
-          onPress: () {},
+          onPress: () {
+            Navigator.of(context).pushNamed(AppRouter.changePass);
+          },
         ),
         MenuItem(
           icon: Icons.logout,

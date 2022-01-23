@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:it_news/app.dart';
 import 'package:it_news/core/exceptions/route_exception.dart';
 import 'package:it_news/data/models/post_full.dart';
+import 'package:it_news/presentation/screens/change_password/change_password_page.dart';
 import 'package:it_news/presentation/screens/home/home_page.dart';
 import 'package:it_news/presentation/screens/login/login_page.dart';
 import 'package:it_news/presentation/screens/post_detail/post_page.dart';
@@ -16,6 +17,7 @@ class AppRouter {
   static const String login = '/login';
   static const String signup = '/signup';
   static const String forgotPass = '/forgotpass';
+  static const String changePass = '/changepass';
   static const String profile = '/profile';
   static const String post = '/post';
 
@@ -38,6 +40,8 @@ class AppRouter {
         return SlideRightRoute(widget: PostPage(post: args));
       case profile:
         return SlideRightRoute(widget: const ProfileEditPage());
+      case changePass:
+        return SlideRightRoute(widget: const ChangePasswordPage());
       default:
         throw const RouteException('Route not found!');
     }

@@ -146,6 +146,29 @@ class AccountRepository {
     return response;
   }
 
+  Future<http.Response> changePassword(String oldPass, String newPass) async {
+    final url = Uri.parse(Strings.baseURL + "account/change/password");
+    var response = await http.put(
+      url,
+      headers: {
+        'Authorization': 'Bearer ${Strings.accessToken}',
+      },
+      body: {
+        'old_password': oldPass,
+        'new_password': newPass,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      LocalStorage.set(
+        key: 'password',
+        value: newPass,
+      );
+    }
+
+    return response;
+  }
+
   void dispose() {
     _controllerStatus.close();
   }
