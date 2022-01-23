@@ -5,6 +5,7 @@ import 'package:it_news/data/models/post_full.dart';
 import 'package:it_news/presentation/screens/home/home_page.dart';
 import 'package:it_news/presentation/screens/login/login_page.dart';
 import 'package:it_news/presentation/screens/post_detail/post_page.dart';
+import 'package:it_news/presentation/screens/profile/profile_edit.dart';
 import 'package:it_news/presentation/screens/signup/signup_page.dart';
 import 'package:it_news/presentation/screens/splash/splash_page.dart';
 
@@ -35,6 +36,8 @@ class AppRouter {
       case post:
         final args = settings.arguments as PostFull;
         return SlideRightRoute(widget: PostPage(post: args));
+      case profile:
+        return SlideRightRoute(widget: const ProfileEditPage());
       default:
         throw const RouteException('Route not found!');
     }

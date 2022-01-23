@@ -5,6 +5,7 @@ import 'package:it_news/logic/authen/bloc/authen_bloc.dart';
 import 'package:it_news/presentation/router/app_router.dart';
 import 'package:it_news/presentation/screens/home/profile.dart';
 import 'package:it_news/presentation/screens/home/tab_posts.dart';
+import 'package:it_news/presentation/screens/profile/profile_page.dart';
 
 // class HomePage extends StatelessWidget {
 //   const HomePage({Key? key}) : super(key: key);
@@ -66,7 +67,7 @@ class _ExampleState extends State<HomePage> {
       'Search',
       style: optionStyle,
     ),
-    const Profile(),
+    const ProfilePage(),
   ];
 
   @override

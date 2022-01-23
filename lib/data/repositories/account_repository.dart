@@ -96,6 +96,48 @@ class AccountRepository {
     }
   }
 
+  Future<http.Response> updateProfile({
+    String realName = "",
+    String birth = "",
+    int gender = 0,
+    String phone = "",
+    String company = "",
+  }) async {
+    final url = Uri.parse(Strings.baseURL + "account/change/information");
+    var response = await http.put(
+      url,
+      headers: {
+        'Authorization': 'Bearer ${Strings.accessToken}',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'real_name': realName,
+        'birth': birth,
+        'gender': gender,
+        'phone': phone,
+        'company': company,
+        'avatar': Utils.user.avatar,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // final body = json.decode(response.body);
+      // User updateUser = User.fromMap(body['data']);
+      // Utils.user = Utils.user.copyWith(
+      //   realName: updateUser.realName,
+      //   birth: updateUser.birth,
+      //   gender: updateUser.gender,
+      //   phone: updateUser.phone,
+      //   company: updateUser.company,
+      // );
+
+      // print(Utils.user);
+      getUser(idAccount: Utils.user.idAccount);
+    }
+
+    return response;
+  }
+
   void dispose() {
     _controllerStatus.close();
   }

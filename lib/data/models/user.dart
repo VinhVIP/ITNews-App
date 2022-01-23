@@ -18,6 +18,7 @@ class User extends Equatable {
   final int gender;
   final String avatar;
   final String company;
+  final String phone;
   final String birth;
   final String createDate;
   final int totalPost;
@@ -38,6 +39,7 @@ class User extends Equatable {
     this.gender = 0,
     this.avatar = "",
     this.company = "",
+    this.phone = "",
     this.birth = "",
     this.createDate = "",
     this.totalPost = 0,
@@ -60,6 +62,7 @@ class User extends Equatable {
         gender,
         avatar,
         company,
+        phone,
         birth,
         createDate,
         totalPost,
@@ -82,6 +85,7 @@ class User extends Equatable {
       'gender': gender,
       'avatar': avatar,
       'company': company,
+      'phone': phone,
       'birth': birth,
       'create_date': createDate,
       'total_post': totalPost,
@@ -105,6 +109,7 @@ class User extends Equatable {
       gender: map['gender']?.toInt() ?? 0,
       avatar: map['avatar'] ?? '',
       company: map['company'] ?? '',
+      phone: map['phone'] ?? '',
       birth: map['birth'] ?? '',
       createDate: map['create_date'] ?? '',
       totalPost: map['total_post'] != null ? int.parse(map['total_post']) : 0,
@@ -132,5 +137,49 @@ class User extends Equatable {
   @override
   String toString() {
     return "$idAccount - $accountName - $realName";
+  }
+
+  User copyWith({
+    int? idAccount,
+    int? idRole,
+    String? role,
+    String? accountName,
+    String? realName,
+    String? email,
+    int? gender,
+    String? avatar,
+    String? company,
+    String? phone,
+    String? birth,
+    String? createDate,
+    int? totalPost,
+    int? totalTagFollow,
+    int? totalFollower,
+    int? totalFollowing,
+    int? totalView,
+    int? totalVoteUp,
+    int? totalVoteDown,
+  }) {
+    return User(
+      idAccount: idAccount ?? this.idAccount,
+      idRole: idRole ?? this.idRole,
+      role: role ?? this.role,
+      accountName: accountName ?? this.accountName,
+      realName: realName ?? this.realName,
+      email: email ?? this.email,
+      gender: gender ?? this.gender,
+      avatar: avatar ?? this.avatar,
+      company: company ?? this.company,
+      phone: phone ?? this.phone,
+      birth: birth ?? this.birth,
+      createDate: createDate ?? this.createDate,
+      totalPost: totalPost ?? this.totalPost,
+      totalTagFollow: totalTagFollow ?? this.totalTagFollow,
+      totalFollower: totalFollower ?? this.totalFollower,
+      totalFollowing: totalFollowing ?? this.totalFollowing,
+      totalView: totalView ?? this.totalView,
+      totalVoteUp: totalVoteUp ?? this.totalVoteUp,
+      totalVoteDown: totalVoteDown ?? this.totalVoteDown,
+    );
   }
 }
