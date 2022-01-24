@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:it_news/app.dart';
 import 'package:it_news/core/exceptions/route_exception.dart';
 import 'package:it_news/data/models/post_full.dart';
+import 'package:it_news/presentation/screens/authors/authors_page.dart';
 import 'package:it_news/presentation/screens/change_password/change_password_page.dart';
+import 'package:it_news/presentation/screens/discover/discover_page.dart';
 import 'package:it_news/presentation/screens/home/home_page.dart';
 import 'package:it_news/presentation/screens/login/login_page.dart';
 import 'package:it_news/presentation/screens/post_detail/post_page.dart';
 import 'package:it_news/presentation/screens/profile/profile_edit.dart';
 import 'package:it_news/presentation/screens/signup/signup_page.dart';
 import 'package:it_news/presentation/screens/splash/splash_page.dart';
+import 'package:it_news/presentation/screens/tags/tags_page.dart';
 
 class AppRouter {
   static const String init = '/';
@@ -20,6 +23,9 @@ class AppRouter {
   static const String changePass = '/changepass';
   static const String profile = '/profile';
   static const String post = '/post';
+  static const String discover = '/discover';
+  static const String tags = '/tags';
+  static const String authors = '/authors';
 
   const AppRouter._();
 
@@ -42,6 +48,12 @@ class AppRouter {
         return SlideRightRoute(widget: const ProfileEditPage());
       case changePass:
         return SlideRightRoute(widget: const ChangePasswordPage());
+      case discover:
+        return SlideRightRoute(widget: const DiscoverPage());
+      case tags:
+        return SlideRightRoute(widget: const TagsPage());
+      case authors:
+        return SlideRightRoute(widget: const AuthorsPage());
       default:
         throw const RouteException('Route not found!');
     }

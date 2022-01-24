@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:it_news/core/utils/utils.dart';
 import 'package:it_news/logic/authen/bloc/authen_bloc.dart';
+import 'package:it_news/presentation/components/menu_item.dart';
 import 'package:it_news/presentation/router/app_router.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -182,40 +183,6 @@ class ItemStatistics extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class MenuItem extends StatelessWidget {
-  const MenuItem(
-      {Key? key, required this.icon, required this.title, this.onPress})
-      : super(key: key);
-
-  final IconData icon;
-  final String title;
-  final VoidCallback? onPress;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Colors.lightBlueAccent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: ListTile(
-        leading: Icon(icon, color: Colors.white),
-        trailing: const Icon(Icons.keyboard_arrow_right),
-        title: Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-          ),
-        ),
-        onTap: onPress,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
         ),
       ),
     );

@@ -2,7 +2,7 @@ import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:it_news/data/models/post_full.dart';
 import 'package:it_news/presentation/router/app_router.dart';
-import 'package:it_news/presentation/screens/tab_posts/tag_item.dart';
+import 'package:it_news/presentation/screens/tab_posts/tag_chip.dart';
 
 class PostListItem extends StatelessWidget {
   final PostFull post;
@@ -78,7 +78,7 @@ class PostListItem extends StatelessWidget {
                         height: 26,
                         child: ListView.builder(
                           itemBuilder: (context, index) {
-                            return TagItem(tagName: post.tags[index].name);
+                            return TagChip(tagName: post.tags[index].name);
                           },
                           itemCount: post.tags.length,
                           scrollDirection: Axis.horizontal,

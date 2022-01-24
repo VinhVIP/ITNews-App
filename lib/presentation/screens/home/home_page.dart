@@ -1,47 +1,9 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:it_news/logic/authen/bloc/authen_bloc.dart';
-import 'package:it_news/presentation/router/app_router.dart';
-import 'package:it_news/presentation/screens/home/profile.dart';
+import 'package:it_news/presentation/screens/discover/discover_page.dart';
 import 'package:it_news/presentation/screens/home/tab_posts.dart';
 import 'package:it_news/presentation/screens/profile/profile_page.dart';
-
-// class HomePage extends StatelessWidget {
-//   const HomePage({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         appBar: AppBar(title: const Text('Home')),
-//         body:
-
-// Center(
-//   child: Column(
-//     mainAxisSize: MainAxisSize.min,
-//     children: <Widget>[
-//       Builder(
-//         builder: (context) {
-//           final userId = context.select(
-//             (AuthenBloc bloc) => bloc.state.user.idAccount,
-//           );
-//           return Text('ID Account: $userId');
-//         },
-//       ),
-//       ElevatedButton(
-//         child: const Text('Logout'),
-//         onPressed: () {
-//           context.read<AuthenBloc>().add(AuthenLogoutRequested());
-//           Navigator.of(context)
-//               .pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
-//         },
-//       ),
-//     ],
-//   ),
-// ),
-//         );
-//   }
-// }
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -59,10 +21,7 @@ class _ExampleState extends State<HomePage> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const TabPosts(),
-    const Text(
-      'Likes',
-      style: optionStyle,
-    ),
+    const DiscoverPage(),
     const Text(
       'Search',
       style: optionStyle,
