@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:it_news/logic/tags/bloc/tags_bloc.dart';
 import 'package:it_news/logic/tags/models/tag_element.dart';
+import 'package:it_news/presentation/router/app_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class TagItem extends StatelessWidget {
@@ -18,7 +19,12 @@ class TagItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context).pushNamed(
+            AppRouter.postsOfTag,
+            arguments: tagElement.tag,
+          );
+        },
         borderRadius: BorderRadius.circular(15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

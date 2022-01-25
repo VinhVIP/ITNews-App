@@ -18,6 +18,8 @@ class PostRepository {
   Future<List<PostFull>?> getPosts({
     required PostType type,
     required int page,
+    int idTag = 0,
+    idAccountAuthor = 0,
   }) async {
     late final Uri url;
     switch (type) {
@@ -29,6 +31,13 @@ class PostRepository {
         break;
       case PostType.trending:
         url = Uri.parse(Strings.baseURL + "post/trending?page=$page");
+        break;
+      case PostType.postsOfTag:
+        url = Uri.parse(Strings.baseURL + "tag/$idTag/posts?page=$page");
+        break;
+      case PostType.postsOfAuthor:
+        url =
+            Uri.parse(Strings.baseURL + "post/trending?page=$page"); // chưa làm
         break;
     }
 

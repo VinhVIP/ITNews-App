@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:it_news/app.dart';
 import 'package:it_news/core/exceptions/route_exception.dart';
 import 'package:it_news/data/models/post_full.dart';
+import 'package:it_news/data/models/tag.dart';
 import 'package:it_news/presentation/screens/authors/authors_page.dart';
 import 'package:it_news/presentation/screens/change_password/change_password_page.dart';
 import 'package:it_news/presentation/screens/discover/discover_page.dart';
@@ -11,6 +12,7 @@ import 'package:it_news/presentation/screens/post_detail/post_page.dart';
 import 'package:it_news/presentation/screens/profile/profile_edit.dart';
 import 'package:it_news/presentation/screens/signup/signup_page.dart';
 import 'package:it_news/presentation/screens/splash/splash_page.dart';
+import 'package:it_news/presentation/screens/tags/posts_of_tag.dart';
 import 'package:it_news/presentation/screens/tags/tags_page.dart';
 
 class AppRouter {
@@ -26,6 +28,8 @@ class AppRouter {
   static const String discover = '/discover';
   static const String tags = '/tags';
   static const String authors = '/authors';
+  static const String postsOfTag = '/postsOfTag';
+  static const String postsOfAuthor = '/postsOfAuthor';
 
   const AppRouter._();
 
@@ -54,6 +58,11 @@ class AppRouter {
         return SlideRightRoute(widget: const TagsPage());
       case authors:
         return SlideRightRoute(widget: const AuthorsPage());
+      case postsOfTag:
+        final args = settings.arguments as Tag;
+        return SlideRightRoute(widget: PostsOfTag(tag: args));
+      // case postsOfAuthor:
+      //   return SlideRightRoute(widget: const AuthorsPage());
       default:
         throw const RouteException('Route not found!');
     }

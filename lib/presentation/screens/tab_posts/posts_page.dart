@@ -6,8 +6,12 @@ import 'package:it_news/presentation/screens/tab_posts/post_list_item.dart';
 import 'package:http/http.dart' as http;
 
 class PostsPage extends StatelessWidget {
-  const PostsPage({Key? key, required this.type}) : super(key: key);
+  const PostsPage(
+      {Key? key, required this.type, this.idTag = 0, this.idAccountAuthor = 0})
+      : super(key: key);
   final PostType type;
+  final int idTag;
+  final int idAccountAuthor;
 
   @override
   Widget build(BuildContext context) {
@@ -15,20 +19,31 @@ class PostsPage extends StatelessWidget {
       create: (_) => PostsBloc(
         postRepository: PostRepository(httpClient: http.Client()),
         type: type,
-      )..add(PostsFetched()),
-      child: const NewestPosts(),
+      )..add(
+          PostsFetched(
+            idTag: idTag,
+            idAccountAuthor: idAccountAuthor,
+          ),
+        ),
+      child: ListPosts(
+        idTag: idTag,
+        idAccountAuthor: idAccountAuthor,
+      ),
     );
   }
 }
 
-class NewestPosts extends StatefulWidget {
-  const NewestPosts({Key? key}) : super(key: key);
+class ListPosts extends StatefulWidget {
+  const ListPosts({Key? key, this.idTag = 0, this.idAccountAuthor = 0})
+      : super(key: key);
+  final int idTag;
+  final int idAccountAuthor;
 
   @override
-  _NewestPostsState createState() => _NewestPostsState();
+  _ListPostsState createState() => _ListPostsState();
 }
 
-class _NewestPostsState extends State<NewestPosts> {
+class _ListPostsState extends State<ListPosts> {
   final _scrollController = ScrollController();
   bool loading = false;
 
@@ -86,7 +101,12 @@ class _NewestPostsState extends State<NewestPosts> {
     if (_isBottom) {
       if (loading == false) {
         loading = true;
-        context.read<PostsBloc>().add(PostsFetched());
+        context.read<PostsBloc>().add(
+              PostsFetched(
+                idTag: widget.idTag,
+                idAccountAuthor: widget.idAccountAuthor,
+              ),
+            );
       }
     }
   }

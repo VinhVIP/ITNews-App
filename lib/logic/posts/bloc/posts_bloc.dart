@@ -6,7 +6,7 @@ import 'package:it_news/data/repositories/post_repository.dart';
 part 'posts_event.dart';
 part 'posts_state.dart';
 
-enum PostType { newest, following, trending }
+enum PostType { newest, following, trending, postsOfTag, postsOfAuthor }
 
 class PostsBloc extends Bloc<PostsEvent, PostsState> {
   final PostRepository postRepository;
@@ -24,7 +24,13 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     if (state.hasReachedMax) return;
     try {
       if (state.fetchStatus == PostStatus.initial) {
-        final posts = await postRepository.getPosts(page: 1, type: type);
+        final posts = await postRepository.getPosts(
+          page: 1,
+          type: type,
+          idTag: event.idTag,
+          idAccountAuthor: event.idAccountAuthor,
+        );
+
         emit(state.copyWith(
           fetchStatus: PostStatus.success,
           posts: posts,
@@ -36,6 +42,8 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
         final posts = await postRepository.getPosts(
           page: nextPage,
           type: type,
+          idTag: event.idTag,
+          idAccountAuthor: event.idAccountAuthor,
         );
         if (posts == null || posts.isEmpty) {
           emit(state.copyWith(hasReachedMax: true));

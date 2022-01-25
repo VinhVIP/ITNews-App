@@ -68,35 +68,35 @@ class _ExampleState extends State<HomePage> {
               duration: const Duration(milliseconds: 300),
               tabBackgroundColor: Colors.grey[100]!,
               color: Colors.black54,
-              tabs: [
-                const GButton(
+              tabs: const [
+                GButton(
                   icon: Icons.home,
-                  text: 'Home',
+                  text: 'Trang chủ',
                 ),
                 GButton(
-                  icon: Icons.favorite,
-                  text: 'Likes',
-                  leading: Badge(
-                    badgeColor: Colors.red.shade100,
-                    elevation: 0,
-                    position: BadgePosition.topEnd(top: -12, end: -12),
-                    badgeContent: Text(
-                      "5",
-                      style: TextStyle(color: Colors.red.shade900),
-                    ),
-                    child: Icon(
-                      Icons.favorite,
-                      color: _selectedIndex == 1 ? Colors.pink : Colors.black,
-                    ),
-                  ),
+                  icon: Icons.all_inclusive,
+                  text: 'Khám phá',
+                  // leading: Badge(
+                  //   badgeColor: Colors.red.shade100,
+                  //   elevation: 0,
+                  //   position: BadgePosition.topEnd(top: -12, end: -12),
+                  //   badgeContent: Text(
+                  //     "5",
+                  //     style: TextStyle(color: Colors.red.shade900),
+                  //   ),
+                  //   child: Icon(
+                  //     Icons.favorite,
+                  //     color: _selectedIndex == 1 ? Colors.pink : Colors.black,
+                  //   ),
+                  // ),
                 ),
-                const GButton(
+                GButton(
                   icon: Icons.search,
                   text: 'Search',
                 ),
-                const GButton(
+                GButton(
                   icon: Icons.person,
-                  text: 'Profile',
+                  text: 'Cá nhân',
                 ),
               ],
               selectedIndex: _selectedIndex,
