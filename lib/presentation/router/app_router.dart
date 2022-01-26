@@ -3,7 +3,10 @@ import 'package:it_news/app.dart';
 import 'package:it_news/core/exceptions/route_exception.dart';
 import 'package:it_news/data/models/post_full.dart';
 import 'package:it_news/data/models/tag.dart';
+import 'package:it_news/data/models/user.dart';
+import 'package:it_news/presentation/screens/authors/author_profile.dart';
 import 'package:it_news/presentation/screens/authors/authors_page.dart';
+import 'package:it_news/presentation/screens/authors/posts_of_author.dart';
 import 'package:it_news/presentation/screens/change_password/change_password_page.dart';
 import 'package:it_news/presentation/screens/discover/discover_page.dart';
 import 'package:it_news/presentation/screens/home/home_page.dart';
@@ -30,6 +33,7 @@ class AppRouter {
   static const String authors = '/authors';
   static const String postsOfTag = '/postsOfTag';
   static const String postsOfAuthor = '/postsOfAuthor';
+  static const String authorProfile = '/authorProfile';
 
   const AppRouter._();
 
@@ -61,8 +65,12 @@ class AppRouter {
       case postsOfTag:
         final args = settings.arguments as Tag;
         return SlideRightRoute(widget: PostsOfTag(tag: args));
-      // case postsOfAuthor:
-      //   return SlideRightRoute(widget: const AuthorsPage());
+      case postsOfAuthor:
+        final args = settings.arguments as User;
+        return SlideRightRoute(widget: PostsOfAuthor(author: args));
+      case authorProfile:
+        final args = settings.arguments as User;
+        return SlideRightRoute(widget: AuthorProfile(author: args));
       default:
         throw const RouteException('Route not found!');
     }

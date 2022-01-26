@@ -21,7 +21,7 @@ class DiscoverPage extends StatelessWidget {
           icon: Icons.person,
           title: "Tất cả tác giả",
           onPress: () {
-            // Navigator.of(context).pushNamed(AppRouter.profile);
+            Navigator.of(context).pushNamed(AppRouter.authors);
           },
         ),
       ],

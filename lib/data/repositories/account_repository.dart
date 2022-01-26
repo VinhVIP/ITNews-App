@@ -169,6 +169,38 @@ class AccountRepository {
     return response;
   }
 
+  Future<List<User>?> getAllAuthors() async {
+    final url = Uri.parse(Strings.baseURL + "account/all");
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      final List<User> authors =
+          (body['data'] as List).map((author) => User.fromMap(author)).toList();
+      return authors;
+    }
+  }
+
+  Future<http.Response> followAccount(int idAccount) async {
+    final url = Uri.parse(Strings.baseURL + "follow_account/$idAccount");
+    var response = await http.post(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+
+    return response;
+  }
+
+  Future<http.Response> unFollowAccount(int idAccount) async {
+    final url = Uri.parse(Strings.baseURL + "follow_account/$idAccount");
+    var response = await http.delete(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+
+    return response;
+  }
+
   void dispose() {
     _controllerStatus.close();
   }

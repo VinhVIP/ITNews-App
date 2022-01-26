@@ -36,8 +36,8 @@ class PostRepository {
         url = Uri.parse(Strings.baseURL + "tag/$idTag/posts?page=$page");
         break;
       case PostType.postsOfAuthor:
-        url =
-            Uri.parse(Strings.baseURL + "post/trending?page=$page"); // chưa làm
+        url = Uri.parse(
+            Strings.baseURL + "account/$idAccountAuthor/posts?page=$page");
         break;
     }
 

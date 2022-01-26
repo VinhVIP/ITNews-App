@@ -21,6 +21,8 @@ class User extends Equatable {
   final String phone;
   final String birth;
   final String createDate;
+  final int accountStatus;
+  final bool followStatus;
   final int totalPost;
   final int totalTagFollow;
   final int totalFollower;
@@ -42,6 +44,8 @@ class User extends Equatable {
     this.phone = "",
     this.birth = "",
     this.createDate = "",
+    this.accountStatus = 0,
+    this.followStatus = false,
     this.totalPost = 0,
     this.totalTagFollow = 0,
     this.totalFollower = 0,
@@ -65,6 +69,8 @@ class User extends Equatable {
         phone,
         birth,
         createDate,
+        accountStatus,
+        followStatus,
         totalPost,
         totalTagFollow,
         totalFollower,
@@ -88,6 +94,8 @@ class User extends Equatable {
       'phone': phone,
       'birth': birth,
       'create_date': createDate,
+      'account_status': accountStatus,
+      'follow_status': followStatus,
       'total_post': totalPost,
       'total_tag_follow': totalTagFollow,
       'total_follower': totalFollower,
@@ -111,6 +119,8 @@ class User extends Equatable {
       company: map['company'] ?? '',
       phone: map['phone'] ?? '',
       birth: map['birth'] ?? '',
+      accountStatus: map['account_status']?.toInt() ?? 0,
+      followStatus: map['status'] ?? false,
       createDate: map['create_date'] ?? '',
       totalPost: map['total_post'] != null ? int.parse(map['total_post']) : 0,
       totalTagFollow: map['total_tag_follow'] != null
@@ -151,6 +161,8 @@ class User extends Equatable {
     String? company,
     String? phone,
     String? birth,
+    int? accountStatus,
+    bool? followStatus,
     String? createDate,
     int? totalPost,
     int? totalTagFollow,
@@ -173,6 +185,8 @@ class User extends Equatable {
       phone: phone ?? this.phone,
       birth: birth ?? this.birth,
       createDate: createDate ?? this.createDate,
+      accountStatus: accountStatus ?? this.accountStatus,
+      followStatus: followStatus ?? this.followStatus,
       totalPost: totalPost ?? this.totalPost,
       totalTagFollow: totalTagFollow ?? this.totalTagFollow,
       totalFollower: totalFollower ?? this.totalFollower,
