@@ -2,16 +2,33 @@ import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:it_news/data/models/user.dart';
 import 'package:it_news/presentation/router/app_router.dart';
+import 'package:it_news/presentation/screens/profile/followers_page.dart';
+import 'package:it_news/presentation/screens/profile/tags_following_page.dart';
+
+import 'followings_page.dart';
 
 class ProfileDetail extends StatelessWidget {
   const ProfileDetail({Key? key, required this.account}) : super(key: key);
   final User account;
 
+  void showBottomModal(context, widget) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      isScrollControlled: true,
+      builder: (context) => widget,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: const ScrollPhysics(),
-      shrinkWrap: true,
+    return Column(
+      // physics: const ScrollPhysics(),
+      // shrinkWrap: true,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -101,21 +118,27 @@ class ProfileDetail extends StatelessWidget {
               icon: Icons.people,
               num: account.totalFollower,
               description: "Follower",
-              onPress: () {},
+              onPress: () {
+                showBottomModal(context, FollowersPage(author: account));
+              },
             ),
             ItemStatistics(
               color: Colors.orange,
               icon: Icons.person_add_alt_1,
               num: account.totalFollowing,
               description: "Following",
-              onPress: () {},
+              onPress: () {
+                showBottomModal(context, FollowingsPage(author: account));
+              },
             ),
             ItemStatistics(
               color: Colors.brown,
               icon: Icons.tag,
               num: account.totalTagFollow,
               description: "Thẻ",
-              onPress: () {},
+              onPress: () {
+                showBottomModal(context, TagsFollowingPage(author: account));
+              },
             ),
           ],
         ),

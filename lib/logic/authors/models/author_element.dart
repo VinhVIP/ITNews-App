@@ -10,6 +10,9 @@ class AuthorElement extends Equatable {
 
   const AuthorElement(this.author, this.followStatus);
 
+  static const AuthorElement empty =
+      AuthorElement(User.empty, AuthorFollowStatus.success);
+
   @override
   List<Object?> get props => [author, followStatus];
 

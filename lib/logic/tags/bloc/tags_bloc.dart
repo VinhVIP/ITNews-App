@@ -14,6 +14,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
 
   TagsBloc(this.tagRepository) : super(const TagsState()) {
     on<TagsFetched>(_onTagsFetched);
+    on<TagsFollowingFetched>(_onTagsFollowingFetched);
     on<TagFollowed>(_onTagFollowed);
     on<TagUnFollowed>(_onTagUnFollowed);
   }
@@ -22,6 +23,23 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     emit(state.copyWith(fetchedStatus: TagsFetchedStatus.loading));
 
     final List<Tag>? tags = await tagRepository.getAllTags(event.idAccount);
+
+    if (tags != null) {
+      final List<TagElement> tagsElement =
+          tags.map((tag) => TagElement(tag, TagFollowStatus.success)).toList();
+      emit(state.copyWith(
+          tags: tagsElement, fetchedStatus: TagsFetchedStatus.success));
+    } else {
+      emit(state.copyWith(fetchedStatus: TagsFetchedStatus.failure));
+    }
+  }
+
+  void _onTagsFollowingFetched(
+      TagsFollowingFetched event, Emitter<TagsState> emit) async {
+    emit(state.copyWith(fetchedStatus: TagsFetchedStatus.loading));
+
+    final List<Tag>? tags =
+        await tagRepository.getFolowingTags(event.idAccount);
 
     if (tags != null) {
       final List<TagElement> tagsElement =

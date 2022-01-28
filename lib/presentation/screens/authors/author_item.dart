@@ -113,6 +113,7 @@ class AuthorItem extends StatelessWidget {
             const Icon(
               Icons.post_add,
               size: 18,
+              color: Colors.cyan,
             ),
             const SizedBox(width: 3),
             Text('${authorElement.author.totalPost}'),
@@ -125,6 +126,7 @@ class AuthorItem extends StatelessWidget {
             const Icon(
               Icons.star,
               size: 18,
+              color: Colors.cyan,
             ),
             const SizedBox(width: 3),
             Text(
@@ -138,6 +140,7 @@ class AuthorItem extends StatelessWidget {
             const Icon(
               Icons.people,
               size: 18,
+              color: Colors.cyan,
             ),
             const SizedBox(width: 3),
             Text('${authorElement.author.totalFollower}'),

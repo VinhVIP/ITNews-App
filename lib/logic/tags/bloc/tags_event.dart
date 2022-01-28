@@ -16,6 +16,15 @@ class TagsFetched extends TagsEvent {
   List<Object> get props => [idAccount];
 }
 
+class TagsFollowingFetched extends TagsEvent {
+  final int idAccount;
+
+  const TagsFollowingFetched(this.idAccount);
+
+  @override
+  List<Object> get props => [idAccount];
+}
+
 class TagFollowed extends TagsEvent {
   final int idTag;
 

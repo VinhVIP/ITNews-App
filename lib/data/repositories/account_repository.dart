@@ -94,12 +94,17 @@ class AccountRepository {
 
   Future<User?> getUser({required int idAccount}) async {
     final url = Uri.parse(Strings.baseURL + "account/$idAccount");
-    var response = await http.get(url);
+    var response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer ${Strings.accessToken}',
+      },
+    );
     if (response.statusCode == 200) {
       final body = json.decode(response.body);
       User user = User.fromMap(body['data']);
-      print(user);
-      Utils.user = user;
+      // print(user);
+      // Utils.user = user;
       return user;
     }
   }
@@ -140,7 +145,7 @@ class AccountRepository {
       // );
 
       // print(Utils.user);
-      getUser(idAccount: Utils.user.idAccount);
+      Utils.user = (await getUser(idAccount: Utils.user.idAccount))!;
     }
 
     return response;
@@ -199,6 +204,34 @@ class AccountRepository {
     });
 
     return response;
+  }
+
+  Future<List<User>?> getFollowers(int idAccount) async {
+    final url = Uri.parse(Strings.baseURL + "account/$idAccount/follower");
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      final List<User> authors =
+          (body['data'] as List).map((author) => User.fromMap(author)).toList();
+      return authors;
+    }
+  }
+
+  Future<List<User>?> getFollowings(int idAccount) async {
+    final url = Uri.parse(Strings.baseURL + "account/$idAccount/following");
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      final List<User> authors =
+          (body['data'] as List).map((author) => User.fromMap(author)).toList();
+      return authors;
+    }
   }
 
   void dispose() {

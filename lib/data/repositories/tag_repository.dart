@@ -25,6 +25,20 @@ class TagRepository {
     }
   }
 
+  Future<List<Tag>?> getFolowingTags(int idAccount) async {
+    final url = Uri.parse(Strings.baseURL + "account/$idAccount/follow_tag");
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      final List<Tag> tags =
+          (body['data'] as List).map((tag) => Tag.fromMap(tag)).toList();
+      return tags;
+    }
+  }
+
   Future<http.Response> followTag(int idTag) async {
     final url = Uri.parse(Strings.baseURL + "follow_tag/$idTag");
     var response = await http.post(url, headers: {

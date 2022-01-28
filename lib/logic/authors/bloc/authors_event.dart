@@ -26,3 +26,21 @@ class AuthorUnFollowed extends AuthorsEvent {
   @override
   List<Object> get props => [idAccount];
 }
+
+class AuthorFollowersFetched extends AuthorsEvent {
+  final int idAccount;
+
+  const AuthorFollowersFetched(this.idAccount);
+
+  @override
+  List<Object> get props => [idAccount];
+}
+
+class AuthorFollowingsFetched extends AuthorsEvent {
+  final int idAccount;
+
+  const AuthorFollowingsFetched(this.idAccount);
+
+  @override
+  List<Object> get props => [idAccount];
+}

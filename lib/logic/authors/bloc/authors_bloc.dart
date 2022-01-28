@@ -13,6 +13,8 @@ class AuthorsBloc extends Bloc<AuthorsEvent, AuthorsState> {
   final AccountRepository accountRepository;
   AuthorsBloc(this.accountRepository) : super(const AuthorsState()) {
     on<AuthorsFetched>(_onAuthorsFetched);
+    on<AuthorFollowersFetched>(_onAuthorFollowersFetched);
+    on<AuthorFollowingsFetched>(_onAuthorFollowingsFetched);
     on<AuthorFollowed>(_onAuthorFollowed);
     on<AuthorUnFollowed>(_onAuthorUnFollowed);
   }
@@ -22,6 +24,44 @@ class AuthorsBloc extends Bloc<AuthorsEvent, AuthorsState> {
     emit(state.copyWith(fetchedStatus: AuthorsFetchedStatus.loading));
 
     final List<User>? authors = await accountRepository.getAllAuthors();
+
+    if (authors != null) {
+      final List<AuthorElement> authorsElement = authors
+          .map((author) => AuthorElement(author, AuthorFollowStatus.success))
+          .toList();
+      emit(state.copyWith(
+          authors: authorsElement,
+          fetchedStatus: AuthorsFetchedStatus.success));
+    } else {
+      emit(state.copyWith(fetchedStatus: AuthorsFetchedStatus.failure));
+    }
+  }
+
+  void _onAuthorFollowersFetched(
+      AuthorFollowersFetched event, Emitter<AuthorsState> emit) async {
+    emit(state.copyWith(fetchedStatus: AuthorsFetchedStatus.loading));
+
+    final List<User>? authors =
+        await accountRepository.getFollowers(event.idAccount);
+
+    if (authors != null) {
+      final List<AuthorElement> authorsElement = authors
+          .map((author) => AuthorElement(author, AuthorFollowStatus.success))
+          .toList();
+      emit(state.copyWith(
+          authors: authorsElement,
+          fetchedStatus: AuthorsFetchedStatus.success));
+    } else {
+      emit(state.copyWith(fetchedStatus: AuthorsFetchedStatus.failure));
+    }
+  }
+
+  void _onAuthorFollowingsFetched(
+      AuthorFollowingsFetched event, Emitter<AuthorsState> emit) async {
+    emit(state.copyWith(fetchedStatus: AuthorsFetchedStatus.loading));
+
+    final List<User>? authors =
+        await accountRepository.getFollowings(event.idAccount);
 
     if (authors != null) {
       final List<AuthorElement> authorsElement = authors
