@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:it_news/core/utils/utils.dart';
 import 'package:it_news/logic/authen/bloc/authen_bloc.dart';
+import 'package:it_news/logic/authors/models/author_element.dart';
 import 'package:it_news/presentation/components/menu_item.dart';
 import 'package:it_news/presentation/router/app_router.dart';
 import 'package:it_news/presentation/screens/profile/profile_detail.dart';
@@ -16,7 +17,9 @@ class ProfilePage extends StatelessWidget {
       physics: const ClampingScrollPhysics(),
       shrinkWrap: true,
       children: [
-        ProfileDetail(account: Utils.user),
+        ProfileDetail(
+          authorElement: AuthorElement(Utils.user, AuthorFollowStatus.success),
+        ),
         MenuItem(
           icon: Icons.settings,
           title: "Sửa thông tin cá nhân",

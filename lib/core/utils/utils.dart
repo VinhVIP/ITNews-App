@@ -52,6 +52,8 @@ class Utils {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20))),
         title: Text(title),
         content: Text(content),
         actions: actions,

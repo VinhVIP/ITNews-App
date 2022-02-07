@@ -234,6 +234,44 @@ class AccountRepository {
     }
   }
 
+  Future<http.Response> changeRole(int idAccount, int idRole) async {
+    final url = Uri.parse(Strings.baseURL + "account/$idAccount/role/$idRole");
+    var response = await http.put(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+    return response;
+  }
+
+  Future<http.Response> lockTime(
+      int idAccount, String reason, int hoursLock) async {
+    final url = Uri.parse(Strings.baseURL + "account/$idAccount/ban");
+    var response = await http.post(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    }, body: {
+      'reason': reason,
+      'hours_lock': hoursLock.toString()
+    });
+    return response;
+  }
+
+  Future<http.Response> lockForever(int idAccount, String reason) async {
+    final url = Uri.parse(Strings.baseURL + "account/$idAccount/die");
+    var response = await http.patch(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    }, body: {
+      'reason': reason,
+    });
+    return response;
+  }
+
+  Future<http.Response> unlock(int idAccount) async {
+    final url = Uri.parse(Strings.baseURL + "account/$idAccount/revive");
+    var response = await http.patch(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+    return response;
+  }
+
   void dispose() {
     _controllerStatus.close();
   }

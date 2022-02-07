@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:it_news/core/utils/utils.dart';
 import 'package:it_news/data/models/user.dart';
 import 'package:it_news/data/repositories/account_repository.dart';
 import 'package:it_news/data/store/shared_preferences.dart';
@@ -40,6 +41,9 @@ class AuthenBloc extends Bloc<AuthenEvent, AuthenState> {
       case AuthenStatus.authenticated:
         int idAccount = await LocalStorage.getIdAccount();
         final user = await _authenRepository.getUser(idAccount: idAccount);
+        if (user != null) {
+          Utils.user = user;
+        }
         return emit(user != null
             ? AuthenState.authenticated(user)
             : const AuthenState.unauthenticated());

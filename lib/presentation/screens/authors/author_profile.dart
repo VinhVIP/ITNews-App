@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:it_news/core/utils/utils.dart';
 import 'package:it_news/data/models/user.dart';
 import 'package:it_news/data/repositories/account_repository.dart';
 import 'package:it_news/logic/author/bloc/author_bloc.dart';
@@ -33,7 +34,14 @@ class AuthorProfileDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthorBloc, AuthorState>(
+    return BlocConsumer<AuthorBloc, AuthorState>(
+      listenWhen: (previous, current) {
+        return current.message.isNotEmpty;
+      },
+      listener: (context, state) {
+        return Utils.showMessageDialog(
+            context: context, title: "Thông báo", content: state.message);
+      },
       builder: (context, state) {
         if (state.fetchedStatus == AuthorFetchedStatus.loading) {
           return const Center(
@@ -49,7 +57,7 @@ class AuthorProfileDetail extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.only(top: 10),
             children: [
-              ProfileDetail(account: state.authorElement.author),
+              ProfileDetail(authorElement: state.authorElement),
             ],
             // children[]:
           ),
