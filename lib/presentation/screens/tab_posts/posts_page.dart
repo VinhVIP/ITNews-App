@@ -74,6 +74,7 @@ class _ListPostsState extends State<ListPosts> {
                   ? const BottomLoader()
                   : PostListItem(
                       post: state.posts[index],
+                      ctx: context,
                     );
             },
             itemCount: state.hasReachedMax

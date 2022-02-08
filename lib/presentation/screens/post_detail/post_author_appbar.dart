@@ -1,6 +1,7 @@
 import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:it_news/data/models/user.dart';
+import 'package:it_news/presentation/router/app_router.dart';
 
 class PostAuthorAppBar extends StatelessWidget {
   final User author;
@@ -20,6 +21,13 @@ class PostAuthorAppBar extends StatelessWidget {
         ),
         const SizedBox(width: 10),
         AvatarView(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              AppRouter.authorProfile,
+              arguments: author,
+            );
+          },
           radius: 23,
           borderColor: Colors.yellow,
           avatarType: AvatarType.CIRCLE,

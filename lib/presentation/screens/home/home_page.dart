@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:it_news/presentation/screens/discover/discover_page.dart';
+import 'package:it_news/presentation/screens/home/my_posts.dart';
 import 'package:it_news/presentation/screens/home/tab_posts.dart';
 import 'package:it_news/presentation/screens/profile/profile_page.dart';
 
@@ -22,10 +23,7 @@ class _ExampleState extends State<HomePage> {
   static final List<Widget> _widgetOptions = <Widget>[
     const TabPosts(),
     const DiscoverPage(),
-    const Text(
-      'Search',
-      style: optionStyle,
-    ),
+    const MyPosts(),
     const ProfilePage(),
   ];
 
@@ -91,8 +89,8 @@ class _ExampleState extends State<HomePage> {
                   // ),
                 ),
                 GButton(
-                  icon: Icons.search,
-                  text: 'Search',
+                  icon: Icons.post_add,
+                  text: 'Của tôi',
                 ),
                 GButton(
                   icon: Icons.person,

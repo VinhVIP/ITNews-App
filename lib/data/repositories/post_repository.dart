@@ -39,6 +39,18 @@ class PostRepository {
         url = Uri.parse(
             Strings.baseURL + "account/$idAccountAuthor/posts?page=$page");
         break;
+      case PostType.drafts:
+        url = Uri.parse(Strings.baseURL + "post/drafts?page=$page");
+        break;
+      case PostType.public:
+        url = Uri.parse(Strings.baseURL + "post/public?page=$page");
+        break;
+      case PostType.unlisted:
+        url = Uri.parse(Strings.baseURL + "post/unlisted?page=$page");
+        break;
+      case PostType.bookmark:
+        url = Uri.parse(Strings.baseURL + "post/bookmark?page=$page");
+        break;
     }
 
     var response = await http.get(url, headers: {
@@ -225,6 +237,15 @@ class PostRepository {
     final url =
         Uri.parse(Strings.baseURL + "post/$idPost/comment/$idComment/delete");
     var response = await http.delete(
+      url,
+      headers: {'Authorization': 'Bearer ${Strings.accessToken}'},
+    );
+    return response;
+  }
+
+  Future<http.Response> changeAccess(int idPost, int access) async {
+    final url = Uri.parse(Strings.baseURL + "post/$idPost/access/$access");
+    var response = await http.put(
       url,
       headers: {'Authorization': 'Bearer ${Strings.accessToken}'},
     );

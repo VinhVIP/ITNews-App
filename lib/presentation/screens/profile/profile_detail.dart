@@ -70,15 +70,17 @@ class ProfileDetail extends StatelessWidget {
             ),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buttonFollow(context),
-            const SizedBox(width: 10),
-            buttonRole(context),
-            lockButton(context),
-          ],
-        ),
+        Utils.user.idAccount != authorElement.author.idAccount
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buttonFollow(context),
+                  const SizedBox(width: 10),
+                  buttonRole(context),
+                  lockButton(context),
+                ],
+              )
+            : Container(),
         Padding(
           padding: const EdgeInsets.only(left: 12, top: 0, bottom: 4, right: 6),
           child: Column(
