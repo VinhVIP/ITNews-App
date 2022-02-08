@@ -20,14 +20,24 @@ class PostsFetched extends PostsEvent {
   List<Object> get props => [idTag, idAccountAuthor];
 }
 
-class PostAccessChanged extends PostsEvent {
+class PostsAccessChanged extends PostsEvent {
   final int idPost;
   final int access;
 
-  const PostAccessChanged({required this.idPost, required this.access});
+  const PostsAccessChanged({required this.idPost, required this.access});
 
   @override
   List<Object> get props => [idPost, access];
+}
+
+class PostsStatusChanged extends PostsEvent {
+  final int idPost;
+  final int status;
+
+  const PostsStatusChanged({required this.idPost, required this.status});
+
+  @override
+  List<Object> get props => [idPost, status];
 }
 
 class PostsBookmarkAdded extends PostsEvent {

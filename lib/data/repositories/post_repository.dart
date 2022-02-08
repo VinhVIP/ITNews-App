@@ -51,6 +51,12 @@ class PostRepository {
       case PostType.bookmark:
         url = Uri.parse(Strings.baseURL + "post/bookmark?page=$page");
         break;
+      case PostType.browse:
+        url = Uri.parse(Strings.baseURL + "post/browse?page=$page");
+        break;
+      case PostType.spam:
+        url = Uri.parse(Strings.baseURL + "post/spam?page=$page");
+        break;
     }
 
     var response = await http.get(url, headers: {
@@ -245,6 +251,15 @@ class PostRepository {
 
   Future<http.Response> changeAccess(int idPost, int access) async {
     final url = Uri.parse(Strings.baseURL + "post/$idPost/access/$access");
+    var response = await http.put(
+      url,
+      headers: {'Authorization': 'Bearer ${Strings.accessToken}'},
+    );
+    return response;
+  }
+
+  Future<http.Response> changeStatus(int idPost, int status) async {
+    final url = Uri.parse(Strings.baseURL + "post/$idPost/status/$status");
     var response = await http.put(
       url,
       headers: {'Authorization': 'Bearer ${Strings.accessToken}'},

@@ -55,3 +55,23 @@ class PostVoteDeleted extends PostEvent {
   @override
   List<Object> get props => [idPost, previousVoteType];
 }
+
+class PostStatusChanged extends PostEvent {
+  final int idPost;
+  final int status;
+
+  const PostStatusChanged({required this.idPost, required this.status});
+
+  @override
+  List<Object> get props => [idPost, status];
+}
+
+class PostAccessChanged extends PostEvent {
+  final int idPost;
+  final int access;
+
+  const PostAccessChanged({required this.idPost, required this.access});
+
+  @override
+  List<Object> get props => [idPost, access];
+}

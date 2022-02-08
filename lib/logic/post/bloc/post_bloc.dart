@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:it_news/data/models/post_full.dart';
@@ -15,6 +17,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<PostBookmarkDeleted>(_onPostBookmarkDeleted);
     on<PostVoteAdded>(_onPostVoteAdded);
     on<PostVoteDeleted>(_onPostVoteDeleted);
+    on<PostStatusChanged>(_onPostStatusChanged);
+    on<PostAccessChanged>(_onPostAccessChanged);
   }
 
   Future<void> _onPostFetched(
@@ -124,6 +128,36 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       ));
     } else {
       emit(state.copyWith(votedStatus: PostVoteStatus.failure));
+    }
+  }
+
+  void _onPostStatusChanged(
+      PostStatusChanged event, Emitter<PostState> emit) async {
+    final response =
+        await postRepository.changeStatus(event.idPost, event.status);
+    final body = json.decode(response.body);
+    final message = body['message'];
+    if (response.statusCode == 200) {
+      final post = state.post.post.copyWith(status: event.status);
+      emit(state.copyWith(
+          post: state.post.copyWith(post: post), message: message));
+    } else {
+      emit(state.copyWith(message: message));
+    }
+  }
+
+  void _onPostAccessChanged(
+      PostAccessChanged event, Emitter<PostState> emit) async {
+    final response =
+        await postRepository.changeAccess(event.idPost, event.access);
+    final body = json.decode(response.body);
+    final message = body['message'];
+    if (response.statusCode == 200) {
+      final post = state.post.post.copyWith(access: event.access);
+      emit(state.copyWith(
+          post: state.post.copyWith(post: post), message: message));
+    } else {
+      emit(state.copyWith(message: message));
     }
   }
 }

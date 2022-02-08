@@ -75,7 +75,6 @@ class ProfileDetail extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   buttonFollow(context),
-                  const SizedBox(width: 10),
                   buttonRole(context),
                   lockButton(context),
                 ],
@@ -169,7 +168,10 @@ class ProfileDetail extends StatelessWidget {
   }
 
   Widget lockButton(BuildContext context) {
-    if (Utils.user.idRole == 3) return Container();
+    if (Utils.user.idRole == 3 ||
+        Utils.user.idRole >= authorElement.author.idRole) {
+      return Container();
+    }
     return IconButton(
       onPressed: () {
         if (authorElement.author.accountStatus != 0) {
@@ -205,51 +207,55 @@ class ProfileDetail extends StatelessWidget {
     if (Utils.user.idRole != 1 || authorElement.author.idRole == 1) {
       return Container();
     }
-    return OutlinedButton(
-      child: Text(
-        authorElement.author.role,
-        style: TextStyle(
-            color:
-                authorElement.author.idRole == 2 ? Colors.blue : Colors.green),
+    return Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: OutlinedButton(
+        child: Text(
+          authorElement.author.role,
+          style: TextStyle(
+              color: authorElement.author.idRole == 2
+                  ? Colors.blue
+                  : Colors.green),
+        ),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (_) {
+                return AlertDialog(
+                  title: const Text("Đổi chức vụ"),
+                  content: const Text("Chọn chức vụ muốn thay đổi thành"),
+                  actions: [
+                    ElevatedButton(
+                      onPressed: () {
+                        BlocProvider.of<AuthorBloc>(context).add(
+                          AuthorRoleChanged(
+                            idAccount: authorElement.author.idAccount,
+                            role: 2,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Moder"),
+                      style: ElevatedButton.styleFrom(primary: Colors.blue),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        BlocProvider.of<AuthorBloc>(context).add(
+                          AuthorRoleChanged(
+                            idAccount: authorElement.author.idAccount,
+                            role: 3,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      },
+                      child: const Text("User"),
+                      style: ElevatedButton.styleFrom(primary: Colors.green),
+                    ),
+                  ],
+                );
+              });
+        },
       ),
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                title: const Text("Đổi chức vụ"),
-                content: const Text("Chọn chức vụ muốn thay đổi thành"),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () {
-                      BlocProvider.of<AuthorBloc>(context).add(
-                        AuthorRoleChanged(
-                          idAccount: authorElement.author.idAccount,
-                          role: 2,
-                        ),
-                      );
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Moder"),
-                    style: ElevatedButton.styleFrom(primary: Colors.blue),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      BlocProvider.of<AuthorBloc>(context).add(
-                        AuthorRoleChanged(
-                          idAccount: authorElement.author.idAccount,
-                          role: 3,
-                        ),
-                      );
-                      Navigator.pop(context);
-                    },
-                    child: const Text("User"),
-                    style: ElevatedButton.styleFrom(primary: Colors.green),
-                  ),
-                ],
-              );
-            });
-      },
     );
   }
 

@@ -47,8 +47,12 @@ class AuthorItem extends StatelessWidget {
                     children: [
                       Text(
                         authorElement.author.realName,
-                        style: const TextStyle(
-                          color: Colors.green,
+                        style: TextStyle(
+                          color: authorElement.author.idRole == 1
+                              ? Colors.red
+                              : authorElement.author.idRole == 2
+                                  ? Colors.blue
+                                  : Colors.green,
                           fontSize: 15,
                         ),
                       ),

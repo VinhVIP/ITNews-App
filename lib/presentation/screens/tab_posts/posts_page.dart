@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:it_news/core/utils/utils.dart';
 import 'package:it_news/data/repositories/post_repository.dart';
 import 'package:it_news/logic/posts/bloc/posts_bloc.dart';
 import 'package:it_news/presentation/screens/tab_posts/post_list_item.dart';
@@ -55,39 +56,48 @@ class _ListPostsState extends State<ListPosts> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PostsBloc, PostsState>(builder: (context, state) {
-      loading = false;
-      switch (state.fetchStatus) {
-        case PostStatus.failure:
-          return const Center(
-            child: Text('Lỗi tải danh sách!'),
-          );
-        case PostStatus.success:
-          if (state.posts.isEmpty) {
+    return BlocConsumer<PostsBloc, PostsState>(
+      listenWhen: (previous, current) {
+        return current.message.isNotEmpty;
+      },
+      listener: (context, state) {
+        Utils.showMessageDialog(
+            context: context, title: "Thông báo", content: state.message);
+      },
+      builder: (context, state) {
+        loading = false;
+        switch (state.fetchStatus) {
+          case PostStatus.failure:
             return const Center(
-              child: Text('Không có bài viết!'),
+              child: Text('Lỗi tải danh sách!'),
             );
-          }
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              return index >= state.posts.length
-                  ? const BottomLoader()
-                  : PostListItem(
-                      post: state.posts[index],
-                      ctx: context,
-                    );
-            },
-            itemCount: state.hasReachedMax
-                ? state.posts.length
-                : state.posts.length + 1,
-            controller: _scrollController,
-          );
-        default:
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-      }
-    });
+          case PostStatus.success:
+            if (state.posts.isEmpty) {
+              return const Center(
+                child: Text('Không có bài viết!'),
+              );
+            }
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                return index >= state.posts.length
+                    ? const BottomLoader()
+                    : PostListItem(
+                        post: state.posts[index],
+                        ctx: context,
+                      );
+              },
+              itemCount: state.hasReachedMax
+                  ? state.posts.length
+                  : state.posts.length + 1,
+              controller: _scrollController,
+            );
+          default:
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+        }
+      },
+    );
   }
 
   @override

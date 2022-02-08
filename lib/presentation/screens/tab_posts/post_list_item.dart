@@ -148,6 +148,27 @@ class PostListItem extends StatelessWidget {
       isScrollControlled: true,
       builder: (context) {
         List<Widget> actions = [];
+
+        if (Utils.user.idRole <= 2) {
+          // Nếu là moder trở lên
+
+          switch (post.post.status) {
+            case 0:
+              // Các bài viết Chờ kiểm duyệt
+              actions.add(sensorship(ctx));
+              actions.add(spam(ctx));
+              break;
+            case 1:
+              // Các bài viết đã duyệt
+              actions.add(spam(ctx));
+              break;
+            case 2:
+              // Các bài viết spam
+              actions.add(sensorship(ctx));
+              break;
+          }
+        }
+
         if (Utils.user.idAccount == post.author.idAccount) {
           // Nếu user là tác giả
           switch (post.post.access) {
@@ -169,10 +190,13 @@ class PostListItem extends StatelessWidget {
           }
         }
 
-        if (post.post.bookmarkStatus) {
-          actions.add(deleteBookmark(ctx));
-        } else {
-          actions.add(bookmark(ctx));
+        // Các bài viết công khai hoặc ẩn link và đã kiểm duyệt thì có thể bookmark
+        if (post.post.access != 0 && post.post.status == 1) {
+          if (post.post.bookmarkStatus) {
+            actions.add(deleteBookmark(ctx));
+          } else {
+            actions.add(bookmark(ctx));
+          }
         }
 
         return Wrap(
@@ -181,6 +205,40 @@ class PostListItem extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget sensorship(context) {
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<PostsBloc>(context).add(PostsStatusChanged(
+          idPost: post.post.idPost,
+          status: 1,
+        ));
+        Navigator.pop(context);
+      },
+      child: const ListTile(
+        leading: Icon(Icons.sensors, color: Colors.green),
+        title: Text("Duyệt bài viết"),
+        subtitle: Text("Bài viết sẽ được duyệt cho mọi người xem"),
+      ),
+    );
+  }
+
+  Widget spam(context) {
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<PostsBloc>(context).add(PostsStatusChanged(
+          idPost: post.post.idPost,
+          status: 2,
+        ));
+        Navigator.pop(context);
+      },
+      child: const ListTile(
+        leading: Icon(Icons.remove_moderator, color: Colors.red),
+        title: Text("Chuyển vào Spam"),
+        subtitle: Text("Bài viết không hữu ích"),
+      ),
     );
   }
 
@@ -217,7 +275,7 @@ class PostListItem extends StatelessWidget {
   Widget changeToDrafts(context) {
     return InkWell(
       onTap: () {
-        BlocProvider.of<PostsBloc>(context).add(PostAccessChanged(
+        BlocProvider.of<PostsBloc>(context).add(PostsAccessChanged(
           idPost: post.post.idPost,
           access: 0,
         ));
@@ -226,6 +284,8 @@ class PostListItem extends StatelessWidget {
       child: const ListTile(
         leading: Icon(Icons.drafts),
         title: Text("Chuyển sang Nháp"),
+        subtitle:
+            Text("Chuyển bài viết thành riêng tư, chỉ mình bạn có thể xem"),
       ),
     );
   }
@@ -233,7 +293,7 @@ class PostListItem extends StatelessWidget {
   Widget changeToPublic(context) {
     return InkWell(
       onTap: () {
-        BlocProvider.of<PostsBloc>(context).add(PostAccessChanged(
+        BlocProvider.of<PostsBloc>(context).add(PostsAccessChanged(
           idPost: post.post.idPost,
           access: 1,
         ));
@@ -242,6 +302,7 @@ class PostListItem extends StatelessWidget {
       child: const ListTile(
         leading: Icon(Icons.public),
         title: Text("Chuyển sang Công khai"),
+        subtitle: Text("Công khai bài viết của bạn cho mọi người xem"),
       ),
     );
   }
@@ -249,7 +310,7 @@ class PostListItem extends StatelessWidget {
   Widget changeToUnlisted(context) {
     return InkWell(
       onTap: () {
-        BlocProvider.of<PostsBloc>(context).add(PostAccessChanged(
+        BlocProvider.of<PostsBloc>(context).add(PostsAccessChanged(
           idPost: post.post.idPost,
           access: 2,
         ));
@@ -258,6 +319,7 @@ class PostListItem extends StatelessWidget {
       child: const ListTile(
         leading: Icon(Icons.hide_source),
         title: Text("Chuyển sang Ẩn link"),
+        subtitle: Text("Chỉ những ai có liên kết mới được xem"),
       ),
     );
   }

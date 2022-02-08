@@ -4,6 +4,8 @@ import 'package:it_news/core/exceptions/route_exception.dart';
 import 'package:it_news/data/models/post_full.dart';
 import 'package:it_news/data/models/tag.dart';
 import 'package:it_news/data/models/user.dart';
+import 'package:it_news/presentation/screens/administer/browse_page.dart';
+import 'package:it_news/presentation/screens/administer/spam_page.dart';
 import 'package:it_news/presentation/screens/authors/author_profile.dart';
 import 'package:it_news/presentation/screens/authors/authors_page.dart';
 import 'package:it_news/presentation/screens/authors/posts_of_author.dart';
@@ -34,6 +36,8 @@ class AppRouter {
   static const String postsOfTag = '/postsOfTag';
   static const String postsOfAuthor = '/postsOfAuthor';
   static const String authorProfile = '/authorProfile';
+  static const String browse = '/browse';
+  static const String spam = '/spam';
 
   const AppRouter._();
 
@@ -71,6 +75,10 @@ class AppRouter {
       case authorProfile:
         final args = settings.arguments as User;
         return SlideRightRoute(widget: AuthorProfile(author: args));
+      case browse:
+        return SlideRightRoute(widget: const BrowsePage());
+      case spam:
+        return SlideRightRoute(widget: const SpamPage());
       default:
         throw const RouteException('Route not found!');
     }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:it_news/data/models/post_full.dart';
@@ -16,6 +18,8 @@ enum PostType {
   public,
   unlisted,
   bookmark,
+  browse,
+  spam,
 }
 
 class PostsBloc extends Bloc<PostsEvent, PostsState> {
@@ -25,7 +29,8 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   PostsBloc({required this.postRepository, required this.type})
       : super(const PostsState()) {
     on<PostsFetched>(_onPostFetched);
-    on<PostAccessChanged>(_onPostAccessChanged);
+    on<PostsAccessChanged>(_onPostAccessChanged);
+    on<PostsStatusChanged>(_onPostStatusChanged);
     on<PostsBookmarkAdded>(_onPostBookmarkAdded);
     on<PostsBookmarkDeleted>(_onPostBookmarkDeleted);
   }
@@ -72,7 +77,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   }
 
   void _onPostAccessChanged(
-      PostAccessChanged event, Emitter<PostsState> emit) async {
+      PostsAccessChanged event, Emitter<PostsState> emit) async {
     final response =
         await postRepository.changeAccess(event.idPost, event.access);
     if (response.statusCode == 200) {
@@ -81,13 +86,30 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       emit(state.copyWith(posts: list));
     } else {
       print("loi access changed");
+      final body = json.decode(response.body);
+      emit(state.copyWith(message: body['message']));
+    }
+  }
+
+  void _onPostStatusChanged(
+      PostsStatusChanged event, Emitter<PostsState> emit) async {
+    final response =
+        await postRepository.changeStatus(event.idPost, event.status);
+    if (response.statusCode == 200) {
+      final List<PostFull> list = List.from(state.posts);
+      list.removeWhere((post) => post.post.idPost == event.idPost);
+      emit(state.copyWith(posts: list));
+    } else {
+      print("loi status changed");
+      final body = json.decode(response.body);
+      emit(state.copyWith(message: body['message']));
     }
   }
 
   void _onPostBookmarkAdded(
       PostsBookmarkAdded event, Emitter<PostsState> emit) async {
     final response = await postRepository.addBookmark(event.idPost);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 400) {
       int index =
           state.posts.indexWhere((post) => post.post.idPost == event.idPost);
       final post = state.posts[index].post.copyWith(
@@ -101,13 +123,15 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       emit(state.copyWith(posts: list));
     } else {
       print("loi bookmark");
+      final body = json.decode(response.body);
+      emit(state.copyWith(message: body['message']));
     }
   }
 
   void _onPostBookmarkDeleted(
       PostsBookmarkDeleted event, Emitter<PostsState> emit) async {
     final response = await postRepository.deleteBookmark(event.idPost);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 400) {
       int index =
           state.posts.indexWhere((post) => post.post.idPost == event.idPost);
       final post = state.posts[index].post.copyWith(
@@ -120,7 +144,8 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       list.insert(index, postFull);
       emit(state.copyWith(posts: list));
     } else {
-      print("loi bookmark");
+      final body = json.decode(response.body);
+      emit(state.copyWith(message: body['message']));
     }
   }
 }

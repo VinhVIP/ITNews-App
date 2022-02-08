@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 
 class MenuItem extends StatelessWidget {
-  const MenuItem(
-      {Key? key, required this.icon, required this.title, this.onPress})
-      : super(key: key);
+  const MenuItem({
+    Key? key,
+    required this.icon,
+    required this.title,
+    this.onPress,
+    this.primaryColor = Colors.lightGreen,
+  }) : super(key: key);
 
   final IconData icon;
   final String title;
   final VoidCallback? onPress;
+  final Color primaryColor;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.lightBlueAccent,
+      color: primaryColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
