@@ -18,20 +18,6 @@ class Utils {
     required String content,
     VoidCallback? onOK,
   }) {
-    // showDialog<String>(
-    //   context: context,
-    //   builder: (BuildContext context) => AlertDialog(
-    //     title: const Text('Thông báo'),
-    //     content: Text(message),
-    //     actions: <Widget>[
-    //       TextButton(
-    //         onPressed: () => Navigator.pop(context, 'OK'),
-    //         child: const Text('OK'),
-    //       ),
-    //     ],
-    //   ),
-    // );
-
     List<Widget> actions = [];
     if (onOK == null) {
       actions.add(TextButton(
@@ -57,6 +43,18 @@ class Utils {
         title: Text(title),
         content: Text(content),
         actions: actions,
+      ),
+    );
+  }
+
+  static void showSnackbar({
+    required BuildContext context,
+    required String message,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(milliseconds: 1500),
       ),
     );
   }

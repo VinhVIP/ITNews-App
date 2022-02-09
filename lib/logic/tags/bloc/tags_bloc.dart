@@ -17,6 +17,8 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     on<TagsFollowingFetched>(_onTagsFollowingFetched);
     on<TagFollowed>(_onTagFollowed);
     on<TagUnFollowed>(_onTagUnFollowed);
+    on<TagSelected>(_onTagSelected);
+    on<TagFetchedWithSelection>(_onTagSelectionInitial);
   }
 
   void _onTagsFetched(TagsFetched event, Emitter<TagsState> emit) async {
@@ -32,6 +34,50 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     } else {
       emit(state.copyWith(fetchedStatus: TagsFetchedStatus.failure));
     }
+  }
+
+  void _onTagSelectionInitial(
+      TagFetchedWithSelection event, Emitter<TagsState> emit) async {
+    final List<Tag>? tags = await tagRepository.getTags();
+    if (tags != null) {
+      final List<TagElement> tagsElement =
+          tags.map((tag) => TagElement(tag, TagFollowStatus.success)).toList();
+      for (int i = 0; i < event.tagsSelection.length; i++) {
+        int index = tagsElement.indexWhere(
+            (element) => element.tag.idTag == event.tagsSelection[i].idTag);
+        tagsElement[index] = tagsElement[index].copyWith(isSelected: true);
+      }
+      emit(state.copyWith(
+          tags: tagsElement, fetchedStatus: TagsFetchedStatus.success));
+    } else {
+      emit(state.copyWith(message: "Không có thẻ để chọn"));
+    }
+  }
+
+  void _onTagSelected(TagSelected event, Emitter<TagsState> emit) {
+    final index =
+        state.tags.indexWhere((element) => element.tag.idTag == event.idTag);
+
+    bool selected = !state.tags[index].isSelected;
+
+    if (selected) {
+      int count = 0;
+      for (int i = 0; i < state.tags.length; i++) {
+        if (state.tags[i].isSelected) count++;
+      }
+      if (count >= 5) {
+        emit(state.copyWith(message: "Chỉ được chọn tối đa 5 thẻ!"));
+        return;
+      }
+    }
+
+    final tag = state.tags[index].copyWith(
+      isSelected: selected,
+    );
+    final List<TagElement> list = List.from(state.tags);
+    list.removeAt(index);
+    list.insert(index, tag);
+    emit(state.copyWith(tags: list));
   }
 
   void _onTagsFollowingFetched(

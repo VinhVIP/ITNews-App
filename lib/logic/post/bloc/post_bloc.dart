@@ -19,6 +19,52 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<PostVoteDeleted>(_onPostVoteDeleted);
     on<PostStatusChanged>(_onPostStatusChanged);
     on<PostAccessChanged>(_onPostAccessChanged);
+    on<PostWriteEvent>(_onPostWrite);
+    on<PostUpdatedEvent>(_onPostUpdated);
+  }
+
+  Future<void> _onPostWrite(
+      PostWriteEvent event, Emitter<PostState> emit) async {
+    emit(state.copyWith(writeStatus: PostWriteStatus.loading));
+
+    final response = await postRepository.writePost(
+        event.title, event.content, event.access, event.tags);
+
+    final body = json.decode(response.body);
+    final message = body['message'];
+    if (response.statusCode == 201) {
+      emit(state.copyWith(
+        writeStatus: PostWriteStatus.success,
+        message: message,
+      ));
+    } else {
+      emit(state.copyWith(
+        writeStatus: PostWriteStatus.failure,
+        message: message,
+      ));
+    }
+  }
+
+  Future<void> _onPostUpdated(
+      PostUpdatedEvent event, Emitter<PostState> emit) async {
+    emit(state.copyWith(writeStatus: PostWriteStatus.loading));
+
+    final response = await postRepository.updatePost(
+        event.idPost, event.title, event.content, event.access, event.tags);
+
+    final body = json.decode(response.body);
+    final message = body['message'];
+    if (response.statusCode == 200) {
+      emit(state.copyWith(
+        writeStatus: PostWriteStatus.success,
+        message: message,
+      ));
+    } else {
+      emit(state.copyWith(
+        writeStatus: PostWriteStatus.failure,
+        message: message,
+      ));
+    }
   }
 
   Future<void> _onPostFetched(

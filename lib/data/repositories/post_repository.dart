@@ -266,4 +266,44 @@ class PostRepository {
     );
     return response;
   }
+
+  Future<http.Response> writePost(
+      String title, String content, int access, List<int> tags) async {
+    final url = Uri.parse(Strings.baseURL + "post/");
+    var response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer ${Strings.accessToken}',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'title': title,
+        'content': content,
+        'access': access,
+        'tags': tags,
+      }),
+      encoding: Encoding.getByName('utf-8'),
+    );
+    return response;
+  }
+
+  Future<http.Response> updatePost(int idPost, String title, String content,
+      int access, List<int> tags) async {
+    final url = Uri.parse(Strings.baseURL + "post/$idPost");
+    var response = await http.put(
+      url,
+      headers: {
+        'Authorization': 'Bearer ${Strings.accessToken}',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'title': title,
+        'content': content,
+        'access': access,
+        'tags': tags,
+      }),
+      encoding: Encoding.getByName('utf-8'),
+    );
+    return response;
+  }
 }

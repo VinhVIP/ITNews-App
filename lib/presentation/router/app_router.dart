@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:it_news/app.dart';
 import 'package:it_news/core/exceptions/route_exception.dart';
+import 'package:it_news/data/models/post.dart';
 import 'package:it_news/data/models/post_full.dart';
 import 'package:it_news/data/models/tag.dart';
 import 'package:it_news/data/models/user.dart';
@@ -19,6 +20,9 @@ import 'package:it_news/presentation/screens/signup/signup_page.dart';
 import 'package:it_news/presentation/screens/splash/splash_page.dart';
 import 'package:it_news/presentation/screens/tags/posts_of_tag.dart';
 import 'package:it_news/presentation/screens/tags/tags_page.dart';
+import 'package:it_news/presentation/screens/write_post/access_and_tags.dart';
+import 'package:it_news/presentation/screens/write_post/preview_post.dart';
+import 'package:it_news/presentation/screens/write_post/write_post_page.dart';
 
 class AppRouter {
   static const String init = '/';
@@ -38,6 +42,9 @@ class AppRouter {
   static const String authorProfile = '/authorProfile';
   static const String browse = '/browse';
   static const String spam = '/spam';
+  static const String writePost = '/writePost';
+  static const String previewPost = '/previewPost';
+  static const String accessAndTags = '/accessAndTags';
 
   const AppRouter._();
 
@@ -79,6 +86,15 @@ class AppRouter {
         return SlideRightRoute(widget: const BrowsePage());
       case spam:
         return SlideRightRoute(widget: const SpamPage());
+      case writePost:
+        final args = settings.arguments as PostFull;
+        return SlideRightRoute(widget: WritePostPage(postFull: args));
+      case previewPost:
+        final args = settings.arguments as PostFull;
+        return SlideRightRoute(widget: PreviewPost(postFull: args));
+      case accessAndTags:
+        final args = settings.arguments as PostFull;
+        return SlideRightRoute(widget: PostConfigure(postFull: args));
       default:
         throw const RouteException('Route not found!');
     }

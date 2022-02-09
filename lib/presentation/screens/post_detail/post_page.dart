@@ -5,6 +5,7 @@ import 'package:it_news/data/models/post.dart';
 import 'package:it_news/data/models/post_full.dart';
 import 'package:it_news/data/repositories/post_repository.dart';
 import 'package:it_news/logic/post/bloc/post_bloc.dart';
+import 'package:it_news/presentation/router/app_router.dart';
 import 'package:it_news/presentation/screens/post_detail/expandable_fab.dart';
 import 'package:http/http.dart' as http;
 
@@ -77,7 +78,7 @@ class PostPageView extends StatelessWidget {
         floatingActionButton: BlocBuilder<PostBloc, PostState>(
           builder: (context, state) {
             if (state.fetchedStatus == PostFetchedStatus.success) {
-              return expandedFloatingActionButton(context, state.post.post);
+              return expandedFloatingActionButton(context, state.post);
             } else {
               return Container();
             }
@@ -87,9 +88,10 @@ class PostPageView extends StatelessWidget {
     );
   }
 
-  Widget expandedFloatingActionButton(BuildContext context, Post post) {
+  Widget expandedFloatingActionButton(BuildContext context, PostFull postFull) {
     List<Widget> actions = [];
-    if (Utils.user.idRole <= 2 || Utils.user.idAccount == post.idAccount) {
+    if (Utils.user.idRole <= 2 ||
+        Utils.user.idAccount == postFull.post.idAccount) {
       actions.add(
         Material(
           shape: const CircleBorder(),
@@ -101,7 +103,7 @@ class PostPageView extends StatelessWidget {
             height: 48,
             child: IconButton(
                 onPressed: () {
-                  showBottomModal(context, post);
+                  showBottomModal(context, postFull);
                 },
                 icon: const Icon(
                   Icons.more_horiz,
@@ -124,12 +126,12 @@ class PostPageView extends StatelessWidget {
     );
   }
 
-  void showBottomModal(context, Post post) {
+  void showBottomModal(context, PostFull postFull) {
     List<Widget> actions = [];
 
     // Quản trị dành cho Moder, Admin
     if (Utils.user.idRole <= 2) {
-      switch (post.status) {
+      switch (postFull.post.status) {
         case 0:
           actions.add(const Center(
             child: Text(
@@ -138,8 +140,8 @@ class PostPageView extends StatelessWidget {
             ),
           ));
 
-          actions.add(sensorship(context, post));
-          actions.add(spam(context, post));
+          actions.add(sensorship(context, postFull.post));
+          actions.add(spam(context, postFull.post));
           break;
         case 1:
           actions.add(const Center(
@@ -149,7 +151,7 @@ class PostPageView extends StatelessWidget {
             ),
           ));
 
-          actions.add(spam(context, post));
+          actions.add(spam(context, postFull.post));
           break;
         case 2:
           actions.add(const Center(
@@ -159,25 +161,27 @@ class PostPageView extends StatelessWidget {
             ),
           ));
 
-          actions.add(sensorship(context, post));
+          actions.add(sensorship(context, postFull.post));
           break;
       }
     }
 
     // Quản trị dành cho tác giả
-    if (post.idAccount == Utils.user.idAccount) {
-      switch (post.access) {
+    if (postFull.post.idAccount == Utils.user.idAccount) {
+      actions.add(editPost(context, postFull));
+
+      switch (postFull.post.access) {
         case 0:
-          actions.add(changeToPublic(context, post));
-          actions.add(changeToUnlisted(context, post));
+          actions.add(changeToPublic(context, postFull.post));
+          actions.add(changeToUnlisted(context, postFull.post));
           break;
         case 1:
-          actions.add(changeToDrafts(context, post));
-          actions.add(changeToUnlisted(context, post));
+          actions.add(changeToDrafts(context, postFull.post));
+          actions.add(changeToUnlisted(context, postFull.post));
           break;
         case 2:
-          actions.add(changeToDrafts(context, post));
-          actions.add(changeToPublic(context, post));
+          actions.add(changeToDrafts(context, postFull.post));
+          actions.add(changeToPublic(context, postFull.post));
           break;
       }
     }
@@ -200,6 +204,22 @@ class PostPageView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget editPost(context, PostFull post) {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context);
+        Navigator.pushNamed(context, AppRouter.writePost, arguments: post);
+      },
+      child: const ListTile(
+        leading: SizedBox(
+          child: Icon(Icons.edit, color: Colors.green),
+          height: double.infinity,
+        ),
+        title: Text("Chỉnh sửa bài viết"),
+      ),
     );
   }
 

@@ -21,6 +21,12 @@ class AuthorBloc extends Bloc<AuthorEvent, AuthorState> {
     on<AuthorLockedTime>(_onAuthorLockedTime);
     on<AuthorLockedForever>(_onAuthorLockedForever);
     on<AuthorUnlocked>(_onAuthorUnlocked);
+    on<AuthorViewUser>(_onAuthorViewUser);
+  }
+
+  void _onAuthorViewUser(AuthorViewUser event, Emitter<AuthorState> emit) {
+    emit(state.copyWith(
+        authorElement: state.authorElement.copyWith(author: event.user)));
   }
 
   void _onAuthorFetched(AuthorFetched event, Emitter<AuthorState> emit) async {

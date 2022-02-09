@@ -1,6 +1,9 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:it_news/data/models/post.dart';
+import 'package:it_news/data/models/post_full.dart';
+import 'package:it_news/presentation/router/app_router.dart';
 import 'package:it_news/presentation/screens/discover/discover_page.dart';
 import 'package:it_news/presentation/screens/home/my_posts.dart';
 import 'package:it_news/presentation/screens/home/tab_posts.dart';
@@ -37,7 +40,15 @@ class _ExampleState extends State<HomePage> {
         title: const Text('IT News'),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.create_sharp)),
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  AppRouter.writePost,
+                  arguments: PostFull.empty,
+                );
+              },
+              icon: const Icon(Icons.create_sharp)),
         ],
       ),
       body: Center(

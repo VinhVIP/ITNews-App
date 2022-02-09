@@ -77,19 +77,30 @@ class _ListPostsState extends State<ListPosts> {
                 child: Text('Không có bài viết!'),
               );
             }
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                return index >= state.posts.length
-                    ? const BottomLoader()
-                    : PostListItem(
-                        post: state.posts[index],
-                        ctx: context,
-                      );
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<PostsBloc>().add(
+                      PostsFetched(
+                        idTag: widget.idTag,
+                        idAccountAuthor: widget.idAccountAuthor,
+                        refresh: true,
+                      ),
+                    );
               },
-              itemCount: state.hasReachedMax
-                  ? state.posts.length
-                  : state.posts.length + 1,
-              controller: _scrollController,
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return index >= state.posts.length
+                      ? const BottomLoader()
+                      : PostListItem(
+                          post: state.posts[index],
+                          ctx: context,
+                        );
+                },
+                itemCount: state.hasReachedMax
+                    ? state.posts.length
+                    : state.posts.length + 1,
+                controller: _scrollController,
+              ),
             );
           default:
             return const Center(

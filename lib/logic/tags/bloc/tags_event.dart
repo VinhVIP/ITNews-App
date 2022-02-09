@@ -42,3 +42,21 @@ class TagUnFollowed extends TagsEvent {
   @override
   List<Object> get props => [idTag];
 }
+
+class TagSelected extends TagsEvent {
+  final int idTag;
+
+  const TagSelected(this.idTag);
+
+  @override
+  List<Object> get props => [idTag];
+}
+
+class TagFetchedWithSelection extends TagsEvent {
+  final List<Tag> tagsSelection;
+
+  const TagFetchedWithSelection(this.tagsSelection);
+
+  @override
+  List<Object> get props => [tagsSelection];
+}

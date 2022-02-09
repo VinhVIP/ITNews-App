@@ -16,6 +16,15 @@ class AuthorFetched extends AuthorEvent {
   List<Object> get props => [idAccount];
 }
 
+class AuthorViewUser extends AuthorEvent {
+  final User user;
+
+  const AuthorViewUser(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
+
 class AuthorFollowed extends AuthorEvent {
   final int idAccount;
 

@@ -37,8 +37,11 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
 
   Future<void> _onPostFetched(
       PostsFetched event, Emitter<PostsState> emit) async {
-    if (state.hasReachedMax) return;
+    if (state.hasReachedMax && !event.refresh) return;
     try {
+      if (event.refresh) {
+        emit(state.copyWith(fetchStatus: PostStatus.initial));
+      }
       if (state.fetchStatus == PostStatus.initial) {
         final posts = await postRepository.getPosts(
           page: 1,

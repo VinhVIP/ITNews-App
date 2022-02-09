@@ -75,3 +75,39 @@ class PostAccessChanged extends PostEvent {
   @override
   List<Object> get props => [idPost, access];
 }
+
+class PostWriteEvent extends PostEvent {
+  final String title;
+  final String content;
+  final int access;
+  final List<int> tags;
+
+  const PostWriteEvent({
+    required this.title,
+    required this.content,
+    required this.access,
+    required this.tags,
+  });
+
+  @override
+  List<Object> get props => [title, content, access, tags];
+}
+
+class PostUpdatedEvent extends PostEvent {
+  final int idPost;
+  final String title;
+  final String content;
+  final int access;
+  final List<int> tags;
+
+  const PostUpdatedEvent({
+    required this.idPost,
+    required this.title,
+    required this.content,
+    required this.access,
+    required this.tags,
+  });
+
+  @override
+  List<Object> get props => [idPost, title, content, access, tags];
+}

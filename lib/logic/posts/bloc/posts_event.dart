@@ -10,14 +10,16 @@ abstract class PostsEvent extends Equatable {
 class PostsFetched extends PostsEvent {
   final int idTag;
   final int idAccountAuthor;
+  final bool refresh;
 
   const PostsFetched({
     this.idTag = 0,
     this.idAccountAuthor = 0,
+    this.refresh = false,
   });
 
   @override
-  List<Object> get props => [idTag, idAccountAuthor];
+  List<Object> get props => [idTag, idAccountAuthor, refresh];
 }
 
 class PostsAccessChanged extends PostsEvent {
