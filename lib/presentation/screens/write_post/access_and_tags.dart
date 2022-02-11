@@ -1,3 +1,4 @@
+import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:it_news/core/utils/utils.dart';
@@ -112,7 +113,23 @@ class _AccessAndTagsState extends State<AccessAndTags> {
                 spacing: 6,
                 children: state.tags.map((tagElement) {
                   return ChoiceChip(
-                    label: Text(tagElement.tag.name),
+                    label: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 5.0,
+                      children: [
+                        AvatarView(
+                          radius: 12,
+                          avatarType: AvatarType.CIRCLE,
+                          backgroundColor: Colors.red,
+                          imagePath: tagElement.tag.logo,
+                          placeHolder: const Icon(
+                            Icons.tag,
+                            size: 12,
+                          ),
+                        ),
+                        Text(tagElement.tag.name),
+                      ],
+                    ),
                     selected: tagElement.isSelected,
                     onSelected: (value) {
                       context

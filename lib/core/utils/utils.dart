@@ -12,6 +12,21 @@ class Utils {
     return dt1.compareTo(dt2);
   }
 
+  static String convertDatetime(String timestamp) {
+    return getDate(timestamp) + " - " + getTime(timestamp);
+  }
+
+  static String getDate(String timestamp) {
+    String day = timestamp.substring(8, 10);
+    String mon = timestamp.substring(5, 7);
+    String year = timestamp.substring(0, 4);
+    return "$day/$mon/$year";
+  }
+
+  static String getTime(String timestamp) {
+    return timestamp.substring(11, 16);
+  }
+
   static void showMessageDialog({
     required context,
     required String title,

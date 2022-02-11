@@ -14,6 +14,7 @@ import 'package:it_news/presentation/screens/change_password/change_password_pag
 import 'package:it_news/presentation/screens/discover/discover_page.dart';
 import 'package:it_news/presentation/screens/home/home_page.dart';
 import 'package:it_news/presentation/screens/login/login_page.dart';
+import 'package:it_news/presentation/screens/notification/notification_page.dart';
 import 'package:it_news/presentation/screens/post_detail/post_page.dart';
 import 'package:it_news/presentation/screens/profile/profile_edit.dart';
 import 'package:it_news/presentation/screens/signup/signup_page.dart';
@@ -45,6 +46,7 @@ class AppRouter {
   static const String writePost = '/writePost';
   static const String previewPost = '/previewPost';
   static const String accessAndTags = '/accessAndTags';
+  static const String notification = '/notification';
 
   const AppRouter._();
 
@@ -61,8 +63,8 @@ class AppRouter {
       case signup:
         return SlideRightRoute(widget: const SignUpPage());
       case post:
-        final args = settings.arguments as PostFull;
-        return SlideRightRoute(widget: PostPage(post: args));
+        final args = settings.arguments as int;
+        return SlideRightRoute(widget: PostPage(idPost: args));
       case profile:
         return SlideRightRoute(widget: const ProfileEditPage());
       case changePass:
@@ -95,6 +97,8 @@ class AppRouter {
       case accessAndTags:
         final args = settings.arguments as PostFull;
         return SlideRightRoute(widget: PostConfigure(postFull: args));
+      case notification:
+        return SlideRightRoute(widget: const NotificationPage());
       default:
         throw const RouteException('Route not found!');
     }

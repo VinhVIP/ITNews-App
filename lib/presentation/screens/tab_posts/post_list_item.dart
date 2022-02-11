@@ -27,7 +27,8 @@ class PostListItem extends StatelessWidget {
           splashColor: Colors.greenAccent,
           borderRadius: BorderRadius.circular(15),
           onTap: () {
-            Navigator.of(context).pushNamed(AppRouter.post, arguments: post);
+            Navigator.of(context)
+                .pushNamed(AppRouter.post, arguments: post.post.idPost);
           },
           child: Container(
             padding: const EdgeInsets.all(6),
@@ -191,13 +192,13 @@ class PostListItem extends StatelessWidget {
         }
 
         // Các bài viết công khai hoặc ẩn link và đã kiểm duyệt thì có thể bookmark
-        if (post.post.access != 0 && post.post.status == 1) {
-          if (post.post.bookmarkStatus) {
-            actions.add(deleteBookmark(ctx));
-          } else {
-            actions.add(bookmark(ctx));
-          }
+        // if (post.post.access != 0 && post.post.status == 1) {
+        if (post.post.bookmarkStatus) {
+          actions.add(deleteBookmark(ctx));
+        } else {
+          actions.add(bookmark(ctx));
         }
+        // }
 
         return Wrap(
           children: [

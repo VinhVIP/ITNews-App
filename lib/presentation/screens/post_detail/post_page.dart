@@ -17,15 +17,19 @@ import 'post_content.dart';
 import 'shimmer_author.dart';
 
 class PostPage extends StatelessWidget {
-  const PostPage({Key? key, required this.post}) : super(key: key);
-  final PostFull post;
+  const PostPage({
+    Key? key,
+    required this.idPost,
+  }) : super(key: key);
+
+  final int idPost;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => PostBloc(
         postRepository: PostRepository(httpClient: http.Client()),
-      )..add(PostFetched(idPost: post.post.idPost)),
+      )..add(PostFetched(idPost: idPost)),
       child: const PostPageView(),
     );
   }
@@ -140,6 +144,7 @@ class PostPageView extends StatelessWidget {
             ),
           ));
 
+          actions.add(showPostDetail(context, postFull));
           actions.add(sensorship(context, postFull.post));
           actions.add(spam(context, postFull.post));
           break;
@@ -151,6 +156,7 @@ class PostPageView extends StatelessWidget {
             ),
           ));
 
+          actions.add(showPostDetail(context, postFull));
           actions.add(spam(context, postFull.post));
           break;
         case 2:
@@ -161,6 +167,7 @@ class PostPageView extends StatelessWidget {
             ),
           ));
 
+          actions.add(showPostDetail(context, postFull));
           actions.add(sensorship(context, postFull.post));
           break;
       }
@@ -204,6 +211,118 @@ class PostPageView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget showPostDetail(context, PostFull post) {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                child: Wrap(
+                  direction: Axis.vertical,
+                  spacing: 3.0,
+                  children: [
+                    itemDetail(
+                      title: "Thời gian tạo :",
+                      content:
+                          "${post.post.dayCreated} - ${post.post.timeCreated}",
+                    ),
+                    itemDetail(
+                      title: "Sửa lần cuối :",
+                      content:
+                          "${post.post.dayLastModified} - ${post.post.timeLastModified}",
+                    ),
+                    itemDetail(
+                      title: "Số lượt xem :",
+                      content: "${post.post.view}",
+                    ),
+                    itemDetail(
+                        title: "Điểm vote :",
+                        widgetContent: Row(
+                          children: [
+                            Text(
+                              "${post.post.totalVoteUp - post.post.totalVoteDown}  ",
+                              style: const TextStyle(
+                                  color: Colors.black54, fontSize: 15),
+                            ),
+                            const Text("("),
+                            Text("${post.post.totalVoteUp}"),
+                            const Icon(
+                              Icons.arrow_upward,
+                              size: 15,
+                              color: Colors.green,
+                            ),
+                            const Text(
+                              " ~ ",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            Text("${post.post.totalVoteDown}"),
+                            const Icon(
+                              Icons.arrow_downward,
+                              size: 15,
+                              color: Colors.red,
+                            ),
+                            const Text(")"),
+                          ],
+                        )),
+                    itemDetail(
+                      title: "Số bookmark :",
+                      content: "${post.post.totalBookmark}",
+                    ),
+                    itemDetail(
+                      title: "Số bình luận :",
+                      content: "${post.post.totalComment}",
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+      child: const ListTile(
+        leading: SizedBox(
+          child: Icon(
+            Icons.info,
+            color: Colors.green,
+          ),
+          height: double.infinity,
+        ),
+        title: Text("Chi tiết bài viết"),
+      ),
+    );
+  }
+
+  Widget itemDetail(
+      {required String title, String? content, Widget? widgetContent}) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 110,
+          child: Text(
+            title,
+            style: const TextStyle(color: Colors.black, fontSize: 15),
+          ),
+        ),
+        if (widgetContent != null) ...[
+          widgetContent
+        ] else ...[
+          Text(
+            content!,
+            style: const TextStyle(color: Colors.black54, fontSize: 15),
+          )
+        ],
+      ],
     );
   }
 

@@ -11,6 +11,8 @@ class Post extends Equatable {
   final String content;
   final String dayCreated;
   final String timeCreated;
+  final String dayLastModified;
+  final String timeLastModified;
   final int status;
   final int access;
   final bool bookmarkStatus;
@@ -28,6 +30,8 @@ class Post extends Equatable {
     this.content = "",
     this.dayCreated = "",
     this.timeCreated = "",
+    this.dayLastModified = "",
+    this.timeLastModified = "",
     this.status = 0,
     this.access = 1,
     this.bookmarkStatus = false,
@@ -48,6 +52,8 @@ class Post extends Equatable {
       content,
       dayCreated,
       timeCreated,
+      dayLastModified,
+      timeLastModified,
       status,
       access,
       bookmarkStatus,
@@ -67,6 +73,8 @@ class Post extends Equatable {
     String? content,
     String? dayCreated,
     String? timeCreated,
+    String? dayLastModified,
+    String? timeLastModified,
     int? status,
     int? access,
     bool? bookmarkStatus,
@@ -84,6 +92,8 @@ class Post extends Equatable {
       content: content ?? this.content,
       dayCreated: dayCreated ?? this.dayCreated,
       timeCreated: timeCreated ?? this.timeCreated,
+      dayLastModified: dayLastModified ?? this.dayLastModified,
+      timeLastModified: timeLastModified ?? this.timeLastModified,
       status: status ?? this.status,
       access: access ?? this.access,
       bookmarkStatus: bookmarkStatus ?? this.bookmarkStatus,
@@ -104,6 +114,8 @@ class Post extends Equatable {
       'content': content,
       'day_created': dayCreated,
       'time_created': timeCreated,
+      'day_last_modified': dayLastModified,
+      'time_last_modified': timeLastModified,
       'status': status,
       'access': access,
       'bookmark_status': bookmarkStatus,
@@ -124,6 +136,8 @@ class Post extends Equatable {
       content: map['content'] ?? '',
       dayCreated: map['day_created'] ?? '',
       timeCreated: map['time_created'] ?? '',
+      dayLastModified: map['day_last_modified'] ?? '',
+      timeLastModified: map['time_last_modified'] ?? '',
       status: map['status']?.toInt() ?? 0,
       access: map['access']?.toInt() ?? 0,
       bookmarkStatus: map['bookmark_status'] ?? false,

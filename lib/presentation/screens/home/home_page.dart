@@ -1,13 +1,16 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:it_news/data/models/post.dart';
 import 'package:it_news/data/models/post_full.dart';
+import 'package:it_news/data/repositories/notification_repository.dart';
+import 'package:it_news/logic/notification/bloc/notification_bloc.dart';
 import 'package:it_news/presentation/router/app_router.dart';
 import 'package:it_news/presentation/screens/discover/discover_page.dart';
 import 'package:it_news/presentation/screens/home/my_posts.dart';
 import 'package:it_news/presentation/screens/home/tab_posts.dart';
 import 'package:it_news/presentation/screens/profile/profile_page.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,9 +22,6 @@ class HomePage extends StatefulWidget {
 class _ExampleState extends State<HomePage> {
   int _selectedIndex = 0;
   int badge = 2;
-
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
 
   static final List<Widget> _widgetOptions = <Widget>[
     const TabPosts(),
@@ -39,16 +39,17 @@ class _ExampleState extends State<HomePage> {
         elevation: 5,
         title: const Text('IT News'),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+          const NotifyAction(),
           IconButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.writePost,
-                  arguments: PostFull.empty,
-                );
-              },
-              icon: const Icon(Icons.create_sharp)),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                AppRouter.writePost,
+                arguments: PostFull.empty,
+              );
+            },
+            icon: const Icon(Icons.create_sharp),
+          ),
         ],
       ),
       body: Center(
@@ -85,19 +86,6 @@ class _ExampleState extends State<HomePage> {
                 GButton(
                   icon: Icons.all_inclusive,
                   text: 'Khám phá',
-                  // leading: Badge(
-                  //   badgeColor: Colors.red.shade100,
-                  //   elevation: 0,
-                  //   position: BadgePosition.topEnd(top: -12, end: -12),
-                  //   badgeContent: Text(
-                  //     "5",
-                  //     style: TextStyle(color: Colors.red.shade900),
-                  //   ),
-                  //   child: Icon(
-                  //     Icons.favorite,
-                  //     color: _selectedIndex == 1 ? Colors.pink : Colors.black,
-                  //   ),
-                  // ),
                 ),
                 GButton(
                   icon: Icons.post_add,
@@ -118,6 +106,59 @@ class _ExampleState extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class NotifyAction extends StatelessWidget {
+  const NotifyAction({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) {
+        return NotificationBloc(NotificationRepository(http.Client()))
+          ..add(NotificationCount());
+      },
+      child: const NotifyItem(),
+    );
+  }
+}
+
+class NotifyItem extends StatelessWidget {
+  const NotifyItem({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<NotificationBloc, NotificationState>(
+      builder: (context, state) {
+        return Badge(
+          badgeColor: Colors.amber,
+          elevation: 0,
+          position: BadgePosition.topEnd(top: 6, end: 4),
+          badgeContent: Text(
+            "${state.countUnreadNotification}",
+            style: const TextStyle(color: Colors.white),
+          ),
+          child: IconButton(
+            onPressed: () async {
+              final countNotification = await Navigator.pushNamed(
+                context,
+                AppRouter.notification,
+              ) as int;
+
+              if (countNotification != -1) {
+                context
+                    .read<NotificationBloc>()
+                    .add(NotificationCountUpdated(countNotification));
+              }
+            },
+            icon: const Icon(
+              Icons.notifications,
+            ),
+          ),
+        );
+      },
     );
   }
 }
