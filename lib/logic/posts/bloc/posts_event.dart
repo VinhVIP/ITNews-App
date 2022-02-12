@@ -22,6 +22,16 @@ class PostsFetched extends PostsEvent {
   List<Object> get props => [idTag, idAccountAuthor, refresh];
 }
 
+class PostsSearch extends PostsEvent {
+  final String keyword;
+  final bool isNew;
+
+  const PostsSearch({required this.keyword, this.isNew = false});
+
+  @override
+  List<Object> get props => [keyword, isNew];
+}
+
 class PostsAccessChanged extends PostsEvent {
   final int idPost;
   final int access;

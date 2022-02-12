@@ -7,9 +7,13 @@ import 'package:it_news/presentation/screens/tab_posts/post_list_item.dart';
 import 'package:http/http.dart' as http;
 
 class PostsPage extends StatelessWidget {
-  const PostsPage(
-      {Key? key, required this.type, this.idTag = 0, this.idAccountAuthor = 0})
-      : super(key: key);
+  const PostsPage({
+    Key? key,
+    required this.type,
+    this.idTag = 0,
+    this.idAccountAuthor = 0,
+  }) : super(key: key);
+
   final PostType type;
   final int idTag;
   final int idAccountAuthor;
@@ -35,8 +39,12 @@ class PostsPage extends StatelessWidget {
 }
 
 class ListPosts extends StatefulWidget {
-  const ListPosts({Key? key, this.idTag = 0, this.idAccountAuthor = 0})
-      : super(key: key);
+  const ListPosts({
+    Key? key,
+    this.idTag = 0,
+    this.idAccountAuthor = 0,
+  }) : super(key: key);
+
   final int idTag;
   final int idAccountAuthor;
 

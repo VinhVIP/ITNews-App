@@ -33,6 +33,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     on<PostsStatusChanged>(_onPostStatusChanged);
     on<PostsBookmarkAdded>(_onPostBookmarkAdded);
     on<PostsBookmarkDeleted>(_onPostBookmarkDeleted);
+    on<PostsSearch>(_onPostsSearch);
   }
 
   Future<void> _onPostFetched(
@@ -75,6 +76,46 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       }
     } catch (e) {
       print(e);
+      emit(state.copyWith(fetchStatus: PostStatus.failure));
+    }
+  }
+
+  void _onPostsSearch(PostsSearch event, Emitter<PostsState> emit) async {
+    try {
+      if (event.isNew) {
+        emit(state.copyWith(fetchStatus: PostStatus.loading));
+
+        final posts = await postRepository.search(
+          keyword: event.keyword,
+          page: 1,
+        );
+
+        emit(state.copyWith(
+          fetchStatus: PostStatus.success,
+          posts: posts,
+          hasReachedMax: posts!.length < 10 ? true : false,
+        ));
+      } else {
+        if (state.hasReachedMax) return;
+
+        int size = state.posts.length;
+        final nextPage = (size / 10).ceil() + 1;
+        final posts = await postRepository.search(
+          keyword: event.keyword,
+          page: nextPage,
+        );
+
+        if (posts == null || posts.isEmpty) {
+          emit(state.copyWith(hasReachedMax: true));
+        } else {
+          emit(state.copyWith(
+            fetchStatus: PostStatus.success,
+            posts: List.from(state.posts)..addAll(posts),
+            hasReachedMax: posts.length < 10,
+          ));
+        }
+      }
+    } catch (e) {
       emit(state.copyWith(fetchStatus: PostStatus.failure));
     }
   }

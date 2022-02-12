@@ -4,6 +4,7 @@ import 'package:it_news/data/models/user.dart';
 
 class Utils {
   static User user = User.empty;
+  static bool isEdited = false;
 
   static int compareDatetime(String s1, String s2) {
     DateFormat dateFormat = DateFormat("dd/MM/yyyy-HH:mm");

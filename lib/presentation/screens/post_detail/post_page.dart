@@ -328,9 +328,16 @@ class PostPageView extends StatelessWidget {
 
   Widget editPost(context, PostFull post) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         Navigator.pop(context);
-        Navigator.pushNamed(context, AppRouter.writePost, arguments: post);
+        final res = await Navigator.pushNamed(context, AppRouter.writePost,
+            arguments: post);
+
+        if (Utils.isEdited) {
+          BlocProvider.of<PostBloc>(context)
+              .add(PostFetched(idPost: post.post.idPost));
+          Utils.isEdited = false;
+        }
       },
       child: const ListTile(
         leading: SizedBox(

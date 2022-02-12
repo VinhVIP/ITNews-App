@@ -6,7 +6,6 @@ import 'package:it_news/data/models/post_full.dart';
 import 'package:it_news/data/repositories/post_repository.dart';
 import 'package:it_news/data/repositories/tag_repository.dart';
 import 'package:it_news/logic/post/bloc/post_bloc.dart';
-import 'package:it_news/logic/posts/bloc/posts_bloc.dart';
 import 'package:it_news/logic/tags/bloc/tags_bloc.dart';
 import 'package:http/http.dart' as http;
 
@@ -109,6 +108,7 @@ class _AccessAndTagsState extends State<AccessAndTags> {
                   tagsSelection.add(state.tags[i].tag.idTag);
                 }
               }
+
               return Wrap(
                 spacing: 6,
                 children: state.tags.map((tagElement) {
@@ -148,11 +148,24 @@ class _AccessAndTagsState extends State<AccessAndTags> {
           return current.message.isNotEmpty;
         },
         listener: (context, state) {
-          Utils.showMessageDialog(
-            context: context,
-            title: "Thông báo",
-            content: state.message,
-          );
+          if (state.writeStatus == PostWriteStatus.success) {
+            Utils.isEdited = true;
+            Navigator.pop(context);
+
+            // Utils.showMessageDialog(
+            //   context: context,
+            //   title: "Thông báo",
+            //   content: state.message,
+            //   onOK: () {
+            //   },
+            // );
+          } else {
+            Utils.showMessageDialog(
+              context: context,
+              title: "Thông báo",
+              content: state.message,
+            );
+          }
         },
         builder: (context, state) {
           return ElevatedButton(

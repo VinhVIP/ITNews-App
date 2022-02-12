@@ -17,6 +17,7 @@ import 'package:it_news/presentation/screens/login/login_page.dart';
 import 'package:it_news/presentation/screens/notification/notification_page.dart';
 import 'package:it_news/presentation/screens/post_detail/post_page.dart';
 import 'package:it_news/presentation/screens/profile/profile_edit.dart';
+import 'package:it_news/presentation/screens/search/search_page.dart';
 import 'package:it_news/presentation/screens/signup/signup_page.dart';
 import 'package:it_news/presentation/screens/splash/splash_page.dart';
 import 'package:it_news/presentation/screens/tags/posts_of_tag.dart';
@@ -47,6 +48,7 @@ class AppRouter {
   static const String previewPost = '/previewPost';
   static const String accessAndTags = '/accessAndTags';
   static const String notification = '/notification';
+  static const String search = '/search';
 
   const AppRouter._();
 
@@ -99,6 +101,8 @@ class AppRouter {
         return SlideRightRoute(widget: PostConfigure(postFull: args));
       case notification:
         return SlideRightRoute(widget: const NotificationPage());
+      case search:
+        return SlideRightRoute(widget: const SearchPage());
       default:
         throw const RouteException('Route not found!');
     }

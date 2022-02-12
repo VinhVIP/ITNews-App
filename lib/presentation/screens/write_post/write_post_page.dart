@@ -51,7 +51,7 @@ class _WritePostPageState extends State<WritePostPage> {
       ),
       body: formPost(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           if (_controllerTitle.text.trim().isEmpty ||
               _controllerContent.text.trim().isEmpty) {
             Utils.showSnackbar(
@@ -60,11 +60,13 @@ class _WritePostPageState extends State<WritePostPage> {
             );
             return;
           }
-          Navigator.pushNamed(
+          final res = await Navigator.pushNamed(
             context,
             AppRouter.accessAndTags,
             arguments: getWritePost(),
           );
+
+          if (Utils.isEdited) Navigator.pop(context);
         },
         child: const Icon(Icons.arrow_right_alt),
       ),

@@ -39,6 +39,11 @@ class _ExampleState extends State<HomePage> {
         elevation: 5,
         title: const Text('IT News'),
         actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AppRouter.search);
+              },
+              icon: const Icon(Icons.search)),
           const NotifyAction(),
           IconButton(
             onPressed: () {

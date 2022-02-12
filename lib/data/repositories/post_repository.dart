@@ -78,6 +78,29 @@ class PostRepository {
     }
   }
 
+  Future<List<PostFull>?> search(
+      {required String keyword, required int page}) async {
+    final Uri url =
+        Uri.parse(Strings.baseURL + "post/search?k=$keyword&page=$page");
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      final List listPosts = body['data'];
+      final List<PostFull> list = listPosts
+          .map((data) => PostFull(
+                post: Post.fromMap(data['post']),
+                author: User.fromMap(data['author']),
+                tags: (data['tags'] as List)
+                    .map((tag) => Tag.fromMap(tag))
+                    .toList(),
+              ))
+          .toList();
+      return list;
+    }
+  }
+
   Future<PostFull?> getPost(int idPost) async {
     final url = Uri.parse(Strings.baseURL + "post/$idPost");
     var response = await http.get(url, headers: {
