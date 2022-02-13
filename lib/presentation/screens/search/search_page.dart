@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:it_news/data/repositories/account_repository.dart';
 import 'package:it_news/data/repositories/post_repository.dart';
+import 'package:it_news/data/repositories/tag_repository.dart';
 import 'package:it_news/logic/authors/bloc/authors_bloc.dart';
 import 'package:it_news/logic/posts/bloc/posts_bloc.dart';
+import 'package:it_news/logic/tags/bloc/tags_bloc.dart';
 import 'package:it_news/presentation/screens/search/search_authors.dart';
 import 'package:it_news/presentation/screens/search/search_post.dart';
 import 'package:http/http.dart' as http;
+import 'package:it_news/presentation/screens/search/search_tags.dart';
 import 'package:scroll_navigation/misc/navigation_helpers.dart';
 import 'package:scroll_navigation/navigation/title_scroll_navigation.dart';
 
@@ -26,6 +29,8 @@ class SearchPage extends StatelessWidget {
         create: (_) =>
             AuthorsBloc(AccountRepository(httpClient: http.Client())),
       ),
+      BlocProvider(
+          create: (_) => TagsBloc(TagRepository(httpClient: http.Client())))
     ], child: const SearchPageView());
   }
 }
@@ -64,6 +69,8 @@ class _SearchPageViewState extends State<SearchPageView> {
                   .add(PostsSearch(keyword: value, isNew: true));
               BlocProvider.of<AuthorsBloc>(context)
                   .add(AuthorsSearch(keyword: value, isNew: true));
+              BlocProvider.of<TagsBloc>(context)
+                  .add(TagsSearch(keyword: value, isNew: true));
             },
             decoration: const InputDecoration(
               isDense: true,
@@ -85,9 +92,7 @@ class _SearchPageViewState extends State<SearchPageView> {
         pages: [
           SearchAuthors(keyword: _controller.text.trim()),
           SearchPost(keyword: _controller.text.trim()),
-          const Center(
-            child: Text("Tab 3"),
-          ),
+          SearchTags(),
         ],
       ),
     );

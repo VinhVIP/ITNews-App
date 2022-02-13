@@ -49,6 +49,10 @@ class TagsList extends StatelessWidget {
           return const Center(
             child: Text('Lỗi tải danh sách thẻ!'),
           );
+        } else if (state.fetchedStatus == TagsFetchedStatus.initial) {
+          return const Center(
+            child: Text('Nhập từ khóa cần tìm kiếm!'),
+          );
         }
         return RefreshIndicator(
           onRefresh: () async {

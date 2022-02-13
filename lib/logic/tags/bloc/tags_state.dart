@@ -1,6 +1,6 @@
 part of 'tags_bloc.dart';
 
-enum TagsFetchedStatus { loading, success, failure }
+enum TagsFetchedStatus { initial, loading, success, failure }
 
 class TagsState extends Equatable {
   final List<TagElement> tags;
@@ -9,7 +9,7 @@ class TagsState extends Equatable {
 
   const TagsState({
     this.tags = const <TagElement>[],
-    this.fetchedStatus = TagsFetchedStatus.success,
+    this.fetchedStatus = TagsFetchedStatus.initial,
     this.message = "",
   });
 

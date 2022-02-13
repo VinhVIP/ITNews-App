@@ -39,6 +39,20 @@ class TagRepository {
     }
   }
 
+  Future<List<Tag>?> getSearch(String keyword) async {
+    final url = Uri.parse(Strings.baseURL + "tag/search?k=$keyword");
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      final List<Tag> tags =
+          (body['data'] as List).map((tag) => Tag.fromMap(tag)).toList();
+      return tags;
+    }
+  }
+
   Future<List<Tag>?> getFolowingTags(int idAccount) async {
     final url = Uri.parse(Strings.baseURL + "account/$idAccount/follow_tag");
     var response = await http.get(url, headers: {

@@ -43,6 +43,16 @@ class TagUnFollowed extends TagsEvent {
   List<Object> get props => [idTag];
 }
 
+class TagsSearch extends TagsEvent {
+  final String keyword;
+  final bool isNew;
+
+  const TagsSearch({required this.keyword, this.isNew = false});
+
+  @override
+  List<Object> get props => [keyword, isNew];
+}
+
 class TagSelected extends TagsEvent {
   final int idTag;
 
