@@ -9,6 +9,16 @@ abstract class AuthorsEvent extends Equatable {
 
 class AuthorsFetched extends AuthorsEvent {}
 
+class AuthorsSearch extends AuthorsEvent {
+  final String keyword;
+  final bool isNew;
+
+  const AuthorsSearch({required this.keyword, this.isNew = false});
+
+  @override
+  List<Object> get props => [keyword, isNew];
+}
+
 class AuthorFollowed extends AuthorsEvent {
   final int idAccount;
 

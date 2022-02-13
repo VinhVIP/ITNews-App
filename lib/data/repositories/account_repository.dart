@@ -188,6 +188,22 @@ class AccountRepository {
     }
   }
 
+  Future<List<User>?> search(
+      {required String keyword, required int page}) async {
+    final url =
+        Uri.parse(Strings.baseURL + "account/search?k=$keyword&page=$page");
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer ${Strings.accessToken}',
+    });
+
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      final List<User> authors =
+          (body['data'] as List).map((author) => User.fromMap(author)).toList();
+      return authors;
+    }
+  }
+
   Future<http.Response> followAccount(int idAccount) async {
     final url = Uri.parse(Strings.baseURL + "follow_account/$idAccount");
     var response = await http.post(url, headers: {

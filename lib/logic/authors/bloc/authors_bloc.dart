@@ -17,6 +17,7 @@ class AuthorsBloc extends Bloc<AuthorsEvent, AuthorsState> {
     on<AuthorFollowingsFetched>(_onAuthorFollowingsFetched);
     on<AuthorFollowed>(_onAuthorFollowed);
     on<AuthorUnFollowed>(_onAuthorUnFollowed);
+    on<AuthorsSearch>(_onAuthorsSearch);
   }
 
   void _onAuthorsFetched(
@@ -33,6 +34,62 @@ class AuthorsBloc extends Bloc<AuthorsEvent, AuthorsState> {
           authors: authorsElement,
           fetchedStatus: AuthorsFetchedStatus.success));
     } else {
+      emit(state.copyWith(fetchedStatus: AuthorsFetchedStatus.failure));
+    }
+  }
+
+  void _onAuthorsSearch(AuthorsSearch event, Emitter<AuthorsState> emit) async {
+    try {
+      if (event.isNew) {
+        emit(state.copyWith(fetchedStatus: AuthorsFetchedStatus.loading));
+
+        final authors = await accountRepository.search(
+          keyword: event.keyword,
+          page: 1,
+        );
+
+        if (authors != null) {
+          final List<AuthorElement> authorsElement = authors
+              .map((author) => AuthorElement(
+                    author,
+                    AuthorFollowStatus.success,
+                  ))
+              .toList();
+          emit(state.copyWith(
+            fetchedStatus: AuthorsFetchedStatus.success,
+            authors: authorsElement,
+            hasReachedMax: authors.length < 10 ? true : false,
+          ));
+        } else {
+          emit(state.copyWith(fetchedStatus: AuthorsFetchedStatus.failure));
+        }
+      } else {
+        if (state.hasReachedMax) return;
+
+        int size = state.authors.length;
+        final nextPage = (size / 10).ceil() + 1;
+        final authors = await accountRepository.search(
+          keyword: event.keyword,
+          page: nextPage,
+        );
+
+        if (authors == null || authors.isEmpty) {
+          emit(state.copyWith(hasReachedMax: true));
+        } else {
+          final List<AuthorElement> authorsElement = authors
+              .map((author) => AuthorElement(
+                    author,
+                    AuthorFollowStatus.success,
+                  ))
+              .toList();
+          emit(state.copyWith(
+            fetchedStatus: AuthorsFetchedStatus.success,
+            authors: List.from(state.authors)..addAll(authorsElement),
+            hasReachedMax: authors.length < 10,
+          ));
+        }
+      }
+    } catch (e) {
       emit(state.copyWith(fetchedStatus: AuthorsFetchedStatus.failure));
     }
   }

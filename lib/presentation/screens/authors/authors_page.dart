@@ -12,6 +12,7 @@ class AuthorsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Tất cả tác giả"),
       ),
