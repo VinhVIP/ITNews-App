@@ -93,7 +93,8 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
         emit(state.copyWith(
           fetchStatus: PostStatus.success,
           posts: posts,
-          hasReachedMax: posts!.length < 10 ? true : false,
+          keyword: event.keyword,
+          hasReachedMax: posts!.length < 10,
         ));
       } else {
         if (state.hasReachedMax) return;

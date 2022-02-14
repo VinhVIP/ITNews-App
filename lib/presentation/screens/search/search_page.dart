@@ -35,15 +35,8 @@ class SearchPage extends StatelessWidget {
   }
 }
 
-class SearchPageView extends StatefulWidget {
+class SearchPageView extends StatelessWidget {
   const SearchPageView({Key? key}) : super(key: key);
-
-  @override
-  State<SearchPageView> createState() => _SearchPageViewState();
-}
-
-class _SearchPageViewState extends State<SearchPageView> {
-  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +53,6 @@ class _SearchPageViewState extends State<SearchPageView> {
             borderRadius: BorderRadius.circular(30),
           ),
           child: TextField(
-            controller: _controller,
             cursorColor: Colors.white,
             textInputAction: TextInputAction.search,
             style: const TextStyle(color: Colors.white),
@@ -89,9 +81,9 @@ class _SearchPageViewState extends State<SearchPageView> {
           spaceBetween: 40,
         ),
         titles: const ["Tài khoản", "Bài viết", "Thẻ"],
-        pages: [
-          SearchAuthors(keyword: _controller.text.trim()),
-          SearchPost(keyword: _controller.text.trim()),
+        pages: const [
+          SearchAuthors(),
+          SearchPost(),
           SearchTags(),
         ],
       ),

@@ -6,8 +6,7 @@ import 'package:it_news/presentation/screens/tab_posts/post_list_item.dart';
 import 'package:it_news/presentation/screens/tab_posts/posts_page.dart';
 
 class SearchPost extends StatefulWidget {
-  const SearchPost({Key? key, required this.keyword}) : super(key: key);
-  final String keyword;
+  const SearchPost({Key? key}) : super(key: key);
 
   @override
   State<SearchPost> createState() => _SearchPostState();
@@ -86,9 +85,11 @@ class _SearchPostState extends State<SearchPost> {
     if (_isBottom) {
       if (loading == false) {
         loading = true;
+        final String keyword =
+            BlocProvider.of<PostsBloc>(context).state.keyword;
         context.read<PostsBloc>().add(
               PostsSearch(
-                keyword: widget.keyword,
+                keyword: keyword,
                 isNew: false,
               ),
             );

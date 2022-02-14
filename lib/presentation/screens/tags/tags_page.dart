@@ -12,6 +12,7 @@ class TagsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Tất cả thẻ"),
       ),
@@ -52,6 +53,11 @@ class TagsList extends StatelessWidget {
         } else if (state.fetchedStatus == TagsFetchedStatus.initial) {
           return const Center(
             child: Text('Nhập từ khóa cần tìm kiếm!'),
+          );
+        }
+        if (state.tags.isEmpty) {
+          return const Center(
+            child: Text('Không có thẻ nào!'),
           );
         }
         return RefreshIndicator(

@@ -77,6 +77,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       },
       builder: (context, state) {
         return Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
             title: const Text("Sửa thông tin"),
           ),

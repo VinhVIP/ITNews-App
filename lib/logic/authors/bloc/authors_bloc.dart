@@ -58,6 +58,7 @@ class AuthorsBloc extends Bloc<AuthorsEvent, AuthorsState> {
           emit(state.copyWith(
             fetchedStatus: AuthorsFetchedStatus.success,
             authors: authorsElement,
+            keyword: event.keyword,
             hasReachedMax: authors.length < 10 ? true : false,
           ));
         } else {

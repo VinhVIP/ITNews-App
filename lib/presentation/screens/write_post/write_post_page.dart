@@ -33,6 +33,7 @@ class _WritePostPageState extends State<WritePostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           widget.postFull.post.idPost == 0 ? "Viết bài" : "Chỉnh sửa bài viết",

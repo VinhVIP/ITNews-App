@@ -6,8 +6,7 @@ import 'package:it_news/presentation/screens/authors/author_item.dart';
 import 'package:it_news/presentation/screens/tab_posts/posts_page.dart';
 
 class SearchAuthors extends StatefulWidget {
-  const SearchAuthors({Key? key, required this.keyword}) : super(key: key);
-  final String keyword;
+  const SearchAuthors({Key? key}) : super(key: key);
 
   @override
   State<SearchAuthors> createState() => _SearchAuthorsState();
@@ -84,9 +83,11 @@ class _SearchAuthorsState extends State<SearchAuthors> {
     if (_isBottom) {
       if (loading == false) {
         loading = true;
+        final String keyword =
+            BlocProvider.of<AuthorsBloc>(context).state.keyword;
         context.read<AuthorsBloc>().add(
               AuthorsSearch(
-                keyword: widget.keyword,
+                keyword: keyword,
                 isNew: false,
               ),
             );

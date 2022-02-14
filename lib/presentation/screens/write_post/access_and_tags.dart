@@ -60,6 +60,7 @@ class _AccessAndTagsState extends State<AccessAndTags> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Lựa chọn"),
       ),
