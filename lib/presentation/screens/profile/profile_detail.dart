@@ -1,4 +1,5 @@
 import 'package:avatar_view/avatar_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:it_news/core/utils/utils.dart';
@@ -39,10 +40,31 @@ class ProfileDetail extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AvatarView(
-              radius: 50,
-              imagePath: authorElement.author.avatar,
-            ),
+            authorElement.author.avatar.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(50.0),
+                    child: CachedNetworkImage(
+                      imageUrl: authorElement.author.avatar,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                  )
+                : SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50.0),
+                      child: Container(
+                        color: Colors.greenAccent,
+                        child: const Icon(Icons.person),
+                      ),
+                    ),
+                  ),
           ],
         ),
         const SizedBox(height: 10),

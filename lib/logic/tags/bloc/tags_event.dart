@@ -70,3 +70,33 @@ class TagFetchedWithSelection extends TagsEvent {
   @override
   List<Object> get props => [tagsSelection];
 }
+
+class TagUpdated extends TagsEvent {
+  final int idTag;
+  final String name;
+  final File? logo;
+
+  const TagUpdated({required this.idTag, required this.name, this.logo});
+
+  @override
+  List<Object> get props => [idTag, name];
+}
+
+class TagAdded extends TagsEvent {
+  final String name;
+  final File logo;
+
+  const TagAdded({required this.name, required this.logo});
+
+  @override
+  List<Object> get props => [name, logo];
+}
+
+class TagDeleted extends TagsEvent {
+  final int idTag;
+
+  const TagDeleted(this.idTag);
+
+  @override
+  List<Object> get props => [idTag];
+}

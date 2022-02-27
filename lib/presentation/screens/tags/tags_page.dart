@@ -4,6 +4,7 @@ import 'package:it_news/core/utils/utils.dart';
 import 'package:it_news/data/repositories/tag_repository.dart';
 import 'package:it_news/logic/tags/bloc/tags_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:it_news/presentation/screens/tags/tag_input_dialog.dart';
 import 'package:it_news/presentation/screens/tags/tag_item.dart';
 
 class TagsPage extends StatelessWidget {
@@ -11,16 +12,38 @@ class TagsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => TagsBloc(TagRepository(httpClient: http.Client()))
+        ..add(TagsFetched(Utils.user.idAccount)),
+      child: const TagsPageView(),
+    );
+  }
+}
+
+class TagsPageView extends StatelessWidget {
+  const TagsPageView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Tất cả thẻ"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => TagInputDialog(
+                    isCreateNew: true,
+                    ctx: context,
+                  ),
+                );
+              },
+              icon: const Icon(Icons.add)),
+        ],
       ),
-      body: BlocProvider(
-        create: (_) => TagsBloc(TagRepository(httpClient: http.Client()))
-          ..add(TagsFetched(Utils.user.idAccount)),
-        child: const TagsList(),
-      ),
+      body: const TagsList(),
     );
   }
 }

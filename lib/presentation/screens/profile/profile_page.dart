@@ -33,6 +33,9 @@ class ProfilePageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthorBloc, AuthorState>(
       builder: (context, state) {
+        if (state.authorElement.author.idAccount == 0) {
+          return Container();
+        }
         Utils.user = state.authorElement.author;
 
         return RefreshIndicator(

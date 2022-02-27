@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -20,6 +21,9 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
     on<TagSelected>(_onTagSelected);
     on<TagFetchedWithSelection>(_onTagSelectionInitial);
     on<TagsSearch>(_onTagsSearch);
+    on<TagUpdated>(_onTagUpdated);
+    on<TagAdded>(_onTagAdded);
+    on<TagDeleted>(_onTagDeleted);
   }
 
   void _onTagsFetched(TagsFetched event, Emitter<TagsState> emit) async {
@@ -178,6 +182,67 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
       emit(state.copyWith(
         message: body['message'],
       ));
+    }
+  }
+
+  void _onTagAdded(TagAdded event, Emitter<TagsState> emit) async {
+    var response = await tagRepository.addTag(event.name, event.logo);
+
+    final strBody = await response.stream.bytesToString();
+    final body = json.decode(strBody);
+    final message = body['message'];
+
+    if (response.statusCode == 201) {
+      String newLogo = body['data']['logo'];
+
+      Tag tag = Tag.fromMap(body['data']);
+      TagElement newElement = TagElement(tag, TagFollowStatus.success);
+
+      List<TagElement> list = List.from(state.tags);
+      list.add(newElement);
+
+      emit(state.copyWith(tags: list, message: message));
+    } else {
+      emit(state.copyWith(message: message));
+    }
+  }
+
+  void _onTagUpdated(TagUpdated event, Emitter<TagsState> emit) async {
+    var response = await tagRepository.updateTag(event.idTag, event.name,
+        logo: event.logo);
+    final strBody = await response.stream.bytesToString();
+    final body = json.decode(strBody);
+    final message = body['message'];
+
+    if (response.statusCode == 200) {
+      String newLogo = body['data']['logo'];
+
+      List<TagElement> list = List.from(state.tags);
+      int index =
+          list.indexWhere((element) => element.tag.idTag == event.idTag);
+      TagElement newTagElement = list[index].copyWith(
+          tag: list[index].tag.copyWith(name: event.name, logo: newLogo));
+      list.removeAt(index);
+      list.insert(index, newTagElement);
+
+      emit(state.copyWith(tags: list, message: message));
+    } else {
+      emit(state.copyWith(message: message));
+    }
+  }
+
+  void _onTagDeleted(TagDeleted event, Emitter<TagsState> emit) async {
+    final response = await tagRepository.deleteTag(event.idTag);
+    final body = json.decode(response.body);
+    if (response.statusCode == 200) {
+      List<TagElement> list = List.from(state.tags);
+      int index =
+          list.indexWhere((element) => element.tag.idTag == event.idTag);
+      list.removeAt(index);
+
+      emit(state.copyWith(tags: list, message: body['message']));
+    } else {
+      emit(state.copyWith(message: body['message']));
     }
   }
 }

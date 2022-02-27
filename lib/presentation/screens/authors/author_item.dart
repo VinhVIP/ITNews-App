@@ -1,4 +1,5 @@
 import 'package:avatar_view/avatar_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:it_news/logic/authors/bloc/authors_bloc.dart';
@@ -31,16 +32,28 @@ class AuthorItem extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  AvatarView(
-                    radius: 28,
-                    avatarType: AvatarType.CIRCLE,
-                    backgroundColor: Colors.red,
-                    imagePath: authorElement.author.avatar,
-                    placeHolder: const Icon(
-                      Icons.person,
-                      size: 20,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50.0),
+                    child: CachedNetworkImage(
+                      imageUrl: authorElement.author.avatar,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Icon(Icons.person),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
                   ),
+                  // AvatarView(
+                  //   radius: 28,
+                  //   avatarType: AvatarType.CIRCLE,
+                  //   backgroundColor: Colors.red,
+                  //   imagePath: authorElement.author.avatar,
+                  //   placeHolder: const Icon(
+                  //     Icons.person,
+                  //     size: 20,
+                  //   ),
+                  // ),
                   const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:avatar_view/avatar_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:it_news/core/utils/utils.dart';
 import 'package:it_news/data/repositories/account_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:it_news/logic/profile/bloc/profile_bloc.dart';
+import 'package:path/path.dart';
 
 class ProfileEditPage extends StatelessWidget {
   const ProfileEditPage({Key? key}) : super(key: key);
@@ -37,6 +42,8 @@ class _ProfileEditState extends State<ProfileEdit> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController companyController = TextEditingController();
   Gender? gender = Gender.male;
+
+  File? pickedAvatar;
 
   @override
   void initState() {
@@ -84,7 +91,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           body: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             children: [
-              _avatar(),
+              _avatar(context),
               const SizedBox(height: 20),
               _realNameInput(),
               const SizedBox(height: 20),
@@ -104,16 +111,103 @@ class _ProfileEditState extends State<ProfileEdit> {
     );
   }
 
-  Widget _avatar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+  Widget _avatar(context) {
+    return Stack(
+      alignment: AlignmentDirectional.topCenter,
       children: [
-        AvatarView(
-          radius: 50,
-          imagePath: Utils.user.avatar,
+        pickedAvatar != null
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(50.0),
+                child: Image.file(
+                  pickedAvatar!,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
+              )
+            : Utils.user.avatar.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(50.0),
+                    child: CachedNetworkImage(
+                      imageUrl: Utils.user.avatar,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                  )
+                : SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50.0),
+                      child: Container(
+                        color: Colors.greenAccent,
+                        child: const Icon(Icons.person),
+                      ),
+                    ),
+                  ),
+        Padding(
+          padding: const EdgeInsets.only(top: 65, left: 75),
+          child: Container(
+            width: 36,
+            height: 36,
+            decoration: const BoxDecoration(
+              color: Colors.black12,
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              onPressed: () {
+                // _getFromGallery(context);
+                // _getFromCamera(context);
+                showBottomModal(context);
+              },
+              padding: EdgeInsets.zero,
+              splashRadius: 20,
+              icon: const Icon(
+                Icons.camera_enhance_sharp,
+                color: Colors.black45,
+              ),
+            ),
+          ),
         ),
       ],
     );
+  }
+
+  /// Get from gallery
+  _getFromGallery(context) async {
+    ImagePicker picker = ImagePicker();
+    XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      File f = File(pickedImage.path);
+      setState(() {
+        pickedAvatar = f;
+      });
+      // BlocProvider.of<ProfileBloc>(context).add(ProfileUpdatedAvatar(f));
+    } else {
+      print("Chưa chọn ảnh");
+    }
+  }
+
+  /// Get from gallery
+  _getFromCamera(context) async {
+    ImagePicker picker = ImagePicker();
+    XFile? pickedImage = await picker.pickImage(source: ImageSource.camera);
+
+    if (pickedImage != null) {
+      File f = File(pickedImage.path);
+      int sz = f.lengthSync();
+      // print("path: " + f.len + " " + basename(f.path));
+      // print("picked path: " + pickedImage.path);
+      BlocProvider.of<ProfileBloc>(context).add(ProfileUpdatedAvatar(f));
+    } else {
+      print("Chưa chọn ảnh");
+    }
   }
 
   Widget _updateButton() {
@@ -132,15 +226,30 @@ class _ProfileEditState extends State<ProfileEdit> {
         onPressed: () {
           if (state.updateStatus == ProfileUpdateStatus.loading) return;
 
-          BlocProvider.of<ProfileBloc>(context).add(
-            ProfileUpdated(
-              realName: realNameController.text.trim(),
-              birth: birthController.text,
-              gender: gender == Gender.male ? 0 : 1,
-              phone: phoneController.text.trim(),
-              company: companyController.text.trim(),
-            ),
-          );
+          if (pickedAvatar != null) {
+            print("update info include avatar");
+
+            BlocProvider.of<ProfileBloc>(context).add(
+              ProfileUpdatedFull(
+                realName: realNameController.text.trim(),
+                birth: birthController.text,
+                gender: gender == Gender.male ? 0 : 1,
+                phone: phoneController.text.trim(),
+                company: companyController.text.trim(),
+                avatar: pickedAvatar,
+              ),
+            );
+          } else {
+            BlocProvider.of<ProfileBloc>(context).add(
+              ProfileUpdated(
+                realName: realNameController.text.trim(),
+                birth: birthController.text,
+                gender: gender == Gender.male ? 0 : 1,
+                phone: phoneController.text.trim(),
+                company: companyController.text.trim(),
+              ),
+            );
+          }
         },
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
@@ -306,6 +415,52 @@ class _ProfileEditState extends State<ProfileEdit> {
             color: Colors.white,
           ),
         ),
+      ),
+    );
+  }
+
+  void showBottomModal(context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      isScrollControlled: true,
+      builder: (ctx) {
+        return Wrap(
+          children: [
+            pickedFromCamera(context),
+            pickedFromGallery(context),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget pickedFromCamera(context) {
+    return InkWell(
+      onTap: () {
+        _getFromCamera(context);
+        Navigator.pop(context);
+      },
+      child: const ListTile(
+        leading: Icon(Icons.camera_enhance, color: Colors.green),
+        title: Text("Chụp ảnh mới"),
+      ),
+    );
+  }
+
+  Widget pickedFromGallery(context) {
+    return InkWell(
+      onTap: () {
+        _getFromGallery(context);
+        Navigator.pop(context);
+      },
+      child: const ListTile(
+        leading: Icon(Icons.image, color: Colors.green),
+        title: Text("Chọn ảnh từ thư viện"),
       ),
     );
   }

@@ -6,6 +6,9 @@ import 'package:it_news/core/constants/strings.dart';
 import 'package:it_news/core/utils/utils.dart';
 import 'package:it_news/data/models/user.dart';
 import 'package:it_news/data/store/shared_preferences.dart';
+import 'package:path/path.dart';
+import 'package:async/async.dart';
+import 'dart:io';
 
 enum AuthenStatus { unknown, authenticated, unauthenticated }
 
@@ -107,6 +110,80 @@ class AccountRepository {
       // Utils.user = user;
       return user;
     }
+  }
+
+  Future<http.StreamedResponse> updateAvatar(File imageFile) async {
+    // open a bytestream
+    var stream = http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+    // get file length
+    var length = await imageFile.length();
+
+    // string to uri
+    var uri = Uri.parse(Strings.baseURL + "account/update/avatar");
+
+    // create multipart request
+    var request = http.MultipartRequest("PUT", uri);
+    request.headers.addAll({
+      'Authorization': 'Bearer ${Strings.accessToken}',
+      'Content-Type': 'application/json',
+    });
+
+    // multipart that takes file
+    var multipartFile = http.MultipartFile('image', stream, length,
+        filename: basename(imageFile.path));
+    print(multipartFile);
+
+    // add file to multipart
+    request.files.add(multipartFile);
+
+    // send
+    var response = await request.send();
+    // print(response.statusCode);
+
+    // // listen for response
+    // response.stream.transform(utf8.decoder).listen((value) {
+    //   print(value);
+    // });
+
+    return response;
+  }
+
+  Future<http.StreamedResponse> updateProfileFull(
+      {String realName = "",
+      String birth = "",
+      int gender = 0,
+      String phone = "",
+      String company = "",
+      File? imageFile}) async {
+    var uri = Uri.parse(Strings.baseURL + "account/update/information");
+    var request = http.MultipartRequest("PUT", uri);
+
+    request.headers.addAll({
+      'Authorization': 'Bearer ${Strings.accessToken}',
+      'Content-Type': 'application/json',
+    });
+
+    if (imageFile != null) {
+      var stream =
+          http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+      var length = await imageFile.length();
+
+      var multipartFile = http.MultipartFile('avatar', stream, length,
+          filename: basename(imageFile.path));
+
+      request.files.add(multipartFile);
+    }
+
+    request.fields['real_name'] = realName;
+    request.fields['birth'] = birth;
+    request.fields['gender'] = "$gender";
+    request.fields['phone'] = phone;
+    request.fields['company'] = company;
+
+    // send
+    var response = await request.send();
+
+    return response;
   }
 
   Future<http.Response> updateProfile({
