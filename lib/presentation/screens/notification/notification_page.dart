@@ -46,6 +46,7 @@ class ListNotifications extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Thông báo"),
+          backgroundColor: Colors.green,
           actions: [
             Tooltip(
               message: "Đánh dấu đã đọc tất cả",

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:it_news/app.dart';
 import 'package:it_news/core/exceptions/route_exception.dart';
-import 'package:it_news/data/models/post.dart';
+import 'package:it_news/data/models/feedback.dart';
 import 'package:it_news/data/models/post_full.dart';
 import 'package:it_news/data/models/tag.dart';
 import 'package:it_news/data/models/user.dart';
@@ -12,6 +12,8 @@ import 'package:it_news/presentation/screens/authors/authors_page.dart';
 import 'package:it_news/presentation/screens/authors/posts_of_author.dart';
 import 'package:it_news/presentation/screens/change_password/change_password_page.dart';
 import 'package:it_news/presentation/screens/discover/discover_page.dart';
+import 'package:it_news/presentation/screens/feedback/feedback_detail.dart';
+import 'package:it_news/presentation/screens/feedback/feedback_page.dart';
 import 'package:it_news/presentation/screens/home/home_page.dart';
 import 'package:it_news/presentation/screens/login/login_page.dart';
 import 'package:it_news/presentation/screens/notification/notification_page.dart';
@@ -49,6 +51,8 @@ class AppRouter {
   static const String accessAndTags = '/accessAndTags';
   static const String notification = '/notification';
   static const String search = '/search';
+  static const String feedback = '/feedback';
+  static const String feedbackDetail = '/feedbackDetail';
 
   const AppRouter._();
 
@@ -103,6 +107,14 @@ class AppRouter {
         return SlideRightRoute(widget: const NotificationPage());
       case search:
         return SlideRightRoute(widget: const SearchPage());
+      case feedback:
+        return SlideRightRoute(widget: const FeedbackPage());
+      case feedbackDetail:
+        final args = settings.arguments as MyFeedback;
+        return SlideRightRoute(
+            widget: FeedbackDetail(
+          feedback: args,
+        ));
       default:
         throw const RouteException('Route not found!');
     }

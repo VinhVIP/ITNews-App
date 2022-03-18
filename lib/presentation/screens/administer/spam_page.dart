@@ -10,6 +10,7 @@ class SpamPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bài viết Spam'),
+        backgroundColor: Colors.green,
       ),
       body: const PostsPage(
         type: PostType.spam,

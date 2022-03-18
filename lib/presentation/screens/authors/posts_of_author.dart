@@ -13,6 +13,7 @@ class PostsOfAuthor extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Bài viết của ${author.realName}'),
+        backgroundColor: Colors.green,
       ),
       body: PostsPage(
         type: PostType.postsOfAuthor,

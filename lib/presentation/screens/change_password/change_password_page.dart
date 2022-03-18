@@ -53,6 +53,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Đổi mật khẩu"),
+        backgroundColor: Colors.green,
       ),
       body: BlocConsumer<ChangePasswordBloc, ChangePasswordState>(
         listenWhen: (previous, current) {

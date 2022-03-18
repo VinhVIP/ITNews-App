@@ -16,6 +16,7 @@ class AuthorProfile extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tác giả'),
+        backgroundColor: Colors.green,
       ),
       body: BlocProvider(
         create: (_) => AuthorBloc(

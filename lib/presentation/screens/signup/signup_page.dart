@@ -10,6 +10,7 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green,
       body: SingleChildScrollView(
         child: ConstrainedBox(
           constraints:

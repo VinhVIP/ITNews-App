@@ -10,6 +10,7 @@ class BrowsePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bài viết chờ kiểm duyệt'),
+        backgroundColor: Colors.green,
       ),
       body: const PostsPage(
         type: PostType.browse,

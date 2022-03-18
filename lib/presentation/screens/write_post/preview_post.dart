@@ -11,6 +11,7 @@ class PreviewPost extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Xem trước"),
+        backgroundColor: Colors.green,
       ),
       body: MarkdownViewer(
         data: "# ${postFull.post.title}\n ${postFull.post.content}",

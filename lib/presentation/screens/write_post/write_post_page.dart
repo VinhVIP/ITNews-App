@@ -38,6 +38,7 @@ class _WritePostPageState extends State<WritePostPage> {
         title: Text(
           widget.postFull.post.idPost == 0 ? "Viết bài" : "Chỉnh sửa bài viết",
         ),
+        backgroundColor: Colors.green,
         actions: [
           IconButton(
               onPressed: () {

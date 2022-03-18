@@ -29,6 +29,7 @@ class TagsPageView extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Tất cả thẻ"),
+        backgroundColor: Colors.green,
         actions: [
           IconButton(
               onPressed: () {

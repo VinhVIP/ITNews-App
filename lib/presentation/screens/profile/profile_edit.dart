@@ -9,7 +9,6 @@ import 'package:it_news/core/utils/utils.dart';
 import 'package:it_news/data/repositories/account_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:it_news/logic/profile/bloc/profile_bloc.dart';
-import 'package:path/path.dart';
 
 class ProfileEditPage extends StatelessWidget {
   const ProfileEditPage({Key? key}) : super(key: key);
@@ -87,6 +86,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             title: const Text("Sửa thông tin"),
+            backgroundColor: Colors.green,
           ),
           body: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),

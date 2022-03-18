@@ -15,6 +15,7 @@ class AuthorsPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Tất cả tác giả"),
+        backgroundColor: Colors.green,
       ),
       body: BlocProvider(
         create: (_) => AuthorsBloc(AccountRepository(httpClient: http.Client()))

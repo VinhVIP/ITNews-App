@@ -34,19 +34,12 @@ class DiscoverPage extends StatelessWidget {
 
       menuAdmin.add(
         MenuItem(
-          icon: Icons.lock,
-          title: "Danh sách tài khoản bị khóa",
-          primaryColor: Colors.lightBlueAccent,
-          onPress: () {},
-        ),
-      );
-
-      menuAdmin.add(
-        MenuItem(
           icon: Icons.feedback_rounded,
           title: "Xem các phản hồi",
           primaryColor: Colors.lightBlueAccent,
-          onPress: () {},
+          onPress: () {
+            Navigator.pushNamed(context, AppRouter.feedback);
+          },
         ),
       );
     }

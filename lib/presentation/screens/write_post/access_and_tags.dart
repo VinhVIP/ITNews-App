@@ -63,6 +63,7 @@ class _AccessAndTagsState extends State<AccessAndTags> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Lựa chọn"),
+        backgroundColor: Colors.green,
       ),
       body: ListView(
         padding: const EdgeInsets.all(10),
