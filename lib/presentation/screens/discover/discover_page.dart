@@ -11,7 +11,7 @@ class DiscoverPage extends StatelessWidget {
     List<Widget> menuAdmin = [];
     if (Utils.user.idRole <= 2) {
       menuAdmin.add(
-        MenuItem(
+        MyMenuItem(
           icon: Icons.sensors,
           title: "Các bài viết chờ duyệt",
           primaryColor: Colors.lightBlueAccent,
@@ -22,7 +22,7 @@ class DiscoverPage extends StatelessWidget {
       );
 
       menuAdmin.add(
-        MenuItem(
+        MyMenuItem(
           icon: Icons.remove_moderator_rounded,
           title: "Các bài viết Spam",
           primaryColor: Colors.lightBlueAccent,
@@ -33,7 +33,7 @@ class DiscoverPage extends StatelessWidget {
       );
 
       menuAdmin.add(
-        MenuItem(
+        MyMenuItem(
           icon: Icons.feedback_rounded,
           title: "Xem các phản hồi",
           primaryColor: Colors.lightBlueAccent,
@@ -47,14 +47,14 @@ class DiscoverPage extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(10),
       children: [
-        MenuItem(
+        MyMenuItem(
           icon: Icons.tag,
           title: "Tất cả thẻ",
           onPress: () {
             Navigator.of(context).pushNamed(AppRouter.tags);
           },
         ),
-        MenuItem(
+        MyMenuItem(
           icon: Icons.person,
           title: "Tất cả tác giả",
           onPress: () {

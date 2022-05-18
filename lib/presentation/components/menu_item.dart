@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MenuItem extends StatelessWidget {
-  const MenuItem({
+class MyMenuItem extends StatelessWidget {
+  const MyMenuItem({
     Key? key,
     required this.icon,
     required this.title,

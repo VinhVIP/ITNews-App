@@ -1,10 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.vinh.it_news">
+    package="com.vinh.itnews">
    <application
+        android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
-        android:label="it_news"
+        android:label="IT News"
         android:name="${applicationName}"
-        android:icon="@drawable/logo">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"

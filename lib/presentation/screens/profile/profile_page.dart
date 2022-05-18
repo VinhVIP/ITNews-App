@@ -51,21 +51,21 @@ class ProfilePageView extends StatelessWidget {
                 authorElement: AuthorElement(
                     state.authorElement.author, AuthorFollowStatus.success),
               ),
-              MenuItem(
+              MyMenuItem(
                 icon: Icons.settings,
                 title: "Sửa thông tin cá nhân",
                 onPress: () {
                   Navigator.of(context).pushNamed(AppRouter.profile);
                 },
               ),
-              MenuItem(
+              MyMenuItem(
                 icon: Icons.password,
                 title: "Đổi mật khẩu",
                 onPress: () {
                   Navigator.of(context).pushNamed(AppRouter.changePass);
                 },
               ),
-              MenuItem(
+              MyMenuItem(
                 icon: Icons.logout,
                 title: "Đăng xuất",
                 onPress: () {

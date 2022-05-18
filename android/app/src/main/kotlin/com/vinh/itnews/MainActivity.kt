@@ -1,4 +1,4 @@
-package com.vinh.it_news
+package com.vinh.itnews
 
 import io.flutter.embedding.android.FlutterActivity
 
